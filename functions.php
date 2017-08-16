@@ -1,13 +1,6 @@
 <?php
-
-/**
- * Kili Main Class
- */
-class KiliFramework {
-
-  public function __construct() {
-
-  }
-
-}
-  
+#-----------------------------------------------------------------
+# Load kiliframework Class
+#-----------------------------------------------------------------
+include_once ( 'app/controllers/class-kiliframework.php' );
+include_once ( 'config/load.php' );
