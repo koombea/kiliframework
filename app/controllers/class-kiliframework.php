@@ -3,9 +3,10 @@
 #-----------------------------------------------------------------
 # Defaults constants for the parent and child theme
 #-----------------------------------------------------------------
-include_once 'defaults.php';
+include_once get_template_directory() . '/config/defaults.php';
+
 //Autoload Helpers.
-foreach (glob(__DIR__ . '/helpers/*/*.php') as $module) {
+foreach (glob(get_template_directory() . '/app/helpers/*/*.php') as $module) {
   if (!$modulepath = $module) {
     trigger_error(sprintf(__('Error locating %s for inclusion', 'kiliframework'), $module), E_USER_ERROR);
   }
