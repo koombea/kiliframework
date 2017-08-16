@@ -2,7 +2,7 @@
 /**
  * TGM Plugin Activation is a PHP library that allows you to easily require or recommend plugins for your WordPress themes (and plugins).
  */
-require_once FRAMEWORK_DIR . 'framework/vendor/tgm/class-tgm-plugin-activation.php';
+require_once FRAMEWORK_DIR . 'vendor/tgm/class-tgm-plugin-activation.php';
 final class Tgm_Load {
 
   public function __construct() {

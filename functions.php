@@ -3,4 +3,4 @@
 #-----------------------------------------------------------------
 # Load kiliframework Class
 #-----------------------------------------------------------------
-include_once get_template_directory() . '/framework/kiliframework.php';
+include_once 'app/controllers/class-kiliframework.php';
