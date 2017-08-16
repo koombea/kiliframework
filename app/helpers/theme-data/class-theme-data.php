@@ -74,7 +74,7 @@ final class Theme_Data {
    * @param array $excl Excluded file names
    * @return void
    */
-  protected function kili_scandir( $dir, $excl = array() ) {
+  public static function kili_scandir( $dir, $excl = array() ) {
     $all_files    = scandir( $dir );
     $files        = array();
     $denied_files = array( '.', '..', '.DS_Store' );
