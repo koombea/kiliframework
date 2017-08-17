@@ -1,3 +1,3 @@
 <?php
 global $kili_framework;
-$kili_framework = new KiliFramework();
+$kili_framework = new Kili_Framework();
