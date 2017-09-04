@@ -36,6 +36,15 @@ if (!class_exists('Kili_Framework')) {
       $this->default_kili_blocks = new Kili_Theme_Blocks();
       $this->base_blocks_style = '';
       $this->add_actions();
+      if ( $this->verify_timber_installation() ) {
+        add_filter( 'timber_context', array( $this, 'add_to_context' ) );
+        Timber::$dirname = array('blocks/styles', 'views', 'views/partials', 'views/layout');
+      }
+      else {
+        add_action( 'admin_notices', function() {
+          echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
+        } );
+      }
     }
   
     /**
@@ -114,11 +123,59 @@ if (!class_exists('Kili_Framework')) {
      */
     function page_blocks_content( $context ){
       $block_position = 0;
-      while (have_rows('kili_block_builder')) : the_row();
+      while ( have_rows('kili_block_builder') ) : the_row();
         KILI_Layout::render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
         $block_position++;
       endwhile;
     }
-  
+
+    /**
+     * Check if Timber is activated
+     *
+     * @return boolean If timber is enabled or no
+     */
+    public function verify_timber_installation() {
+      return class_exists( 'Timber' );
+    }
+
+    /**
+     * Add data to timber context
+     *
+     * @param [array] $context Timber pages content
+     * @return array Context variable updated
+     */
+    public function add_to_context( $context ) {
+      /* Add extra data */
+      $context['options'] = function_exists('get_fields') ? get_fields('option') : '';
+      /* Menu */
+      $context['menu']['primary'] = new TimberMenu('primary_navigation');
+      /* Site info */
+      $context['site'] = $this;
+      /* Assets path */
+      $context['dist']['images'] = $this->theme->link . '/dist/images/';
+      $context['dist']['css'] = $this->theme->link . '/dist/styles/';
+      $context['dist']['js'] = $this->theme->link . '/dist/scripts/';
+      $context['sidebar_primary'] = Timber::get_widgets('sidebar-1');
+
+      add_action('custom_asset', array( $this, 'custom_asset_args' ), 10, 2);
+      if ( function_exists('icl_get_languages') ) {
+        $languages = icl_get_languages('skip_missing=0&orderby=code');
+        if( !empty($languages) ) {
+          $context['languages'] = $languages;
+        }
+      }
+
+      return $context;
+    }
+
+    /**
+     * Set the custom assets
+     *
+     * @param [type] $base_folder Base folder
+     * @return void
+     */
+    public function custom_asset_args( $base_folder ){
+      echo get_template_directory_uri() . '/dist/styles/' . $base_folder;
+    }
   }
 }
