@@ -55,6 +55,7 @@ if (!class_exists('Kili_Framework')) {
     protected function add_actions() {
       add_action( 'wp_enqueue_script', array($this->default_kili_blocks, 'enqueueAdmin') );
       add_action( 'page_blocks', array( $this, 'page_blocks_content' ) );
+      add_action( 'after_setup_theme', array( $this, 'load_text_domain' ) );
     }
     
     /**
@@ -176,6 +177,15 @@ if (!class_exists('Kili_Framework')) {
      */
     public function custom_asset_args( $base_folder ){
       echo get_template_directory_uri() . '/dist/styles/' . $base_folder;
+    }
+
+    /**
+     * Load the theme text domain
+     *
+     * @return void
+     */
+    public function load_text_domain() {
+      load_theme_textdomain( 'kiliframework', get_template_directory() . '/languages' );
     }
   }
 }
