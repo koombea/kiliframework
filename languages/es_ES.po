@@ -1,0 +1,50 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Kiliframework\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 21:14+0000\n"
+"PO-Revision-Date: 2017-09-08 21:22+0000\n"
+"Last-Translator: rhonalf <rhonalf.martinez@koombea.com>\n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es-ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: index.php:11
+msgid "Sorry, no results were found."
+msgstr "Lo sentimos, no se encontraron resultados"
+
+#: app/controllers/class-kili-framework.php:13
+#, php-format
+msgid "Error locating %s for inclusion"
+msgstr "Error localizando %s para su inclusión"
+
+#: app/controllers/class-kili-router.php:110
+#, php-format
+msgid "%s Post"
+msgid_plural "%s Posts"
+msgstr[0] "%s entrada"
+msgstr[1] "%s entradas"
+
+#. Name of the theme
+msgid "Kiliframework"
+msgstr "Kiliframework"
+
+#. Description of the theme
+msgid ""
+"Kili is a powerful open source development framework for complimenting your "
+"themes."
+msgstr ""
+"Kili es un poderoso framework de desarrollo de código libre para "
+"complementar tus temas"
+
+#. URI of the theme
+msgid "https://github.com/koombea/kiliframework"
+msgstr "https://github.com/koombea/kiliframework"
+
+#. Author of the theme
+msgid "Koombea"
+msgstr "Koombea"
