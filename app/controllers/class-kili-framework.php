@@ -22,6 +22,9 @@ include_once ( 'class-kili-theme-blocks.php' );
 // Theme search filters
 include_once ( 'class-kili-search-filter.php' );
 
+//SVG support
+include_once ( 'class-kili-svg-support.php' );
+
 #-----------------------------------------------------------------
 # Define the main class
 #-----------------------------------------------------------------
@@ -33,12 +36,14 @@ if (!class_exists('Kili_Framework')) {
     protected $default_kili_blocks;
     protected $base_blocks_style;
     protected $search_filters;
+    protected $svg_support;
     public $kili_router;
   
     public function __construct() {
       $this->kili_router = new Kili_Router();
       $this->default_kili_blocks = new Kili_Theme_Blocks();
-      $this->search_filters = new Search_Filter();
+      $this->search_filters = new Kili_Search_Filter();
+      $this->svg_support = new Kili_Svg_Support();
       $this->base_blocks_style = '';
       $this->add_actions();
       if ( $this->verify_timber_installation() ) {

@@ -2,7 +2,7 @@
 /**
  * Handle the site's search filter
  */
-class Search_Filter {
+class Kili_Search_Filter {
   public function __construct() {
     add_filter( 'pre_get_posts', array( $this, 'search_filter' ) );
 
