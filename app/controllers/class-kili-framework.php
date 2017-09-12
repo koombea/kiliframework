@@ -19,6 +19,9 @@ unset($module, $filepath);
 // Theme blocks config
 include_once ( 'class-kili-theme-blocks.php' );
 
+// Theme search filters
+include_once ( 'class-kili-search-filter.php' );
+
 #-----------------------------------------------------------------
 # Define the main class
 #-----------------------------------------------------------------
@@ -29,11 +32,13 @@ if (!class_exists('Kili_Framework')) {
   class Kili_Framework {
     protected $default_kili_blocks;
     protected $base_blocks_style;
+    protected $search_filters;
     public $kili_router;
   
     public function __construct() {
       $this->kili_router = new Kili_Router();
       $this->default_kili_blocks = new Kili_Theme_Blocks();
+      $this->search_filters = new Search_Filter();
       $this->base_blocks_style = '';
       $this->add_actions();
       if ( $this->verify_timber_installation() ) {
