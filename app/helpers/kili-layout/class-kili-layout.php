@@ -12,7 +12,7 @@ class Kili_Layout {
    * @param [string] $blocks_id Block builder id
    * @return void
    */
-  public static function render( $layout, $block_position, $context = null, $blocks_id = null ) {
+  public static function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {
     $layout_file = '{{layout}}';
     $find = array( '{{layout}}', '_' );
     $replace = array( $layout, '-' );
@@ -27,6 +27,9 @@ class Kili_Layout {
     $context['layout'] = $layout;
     $context['blocks_id'] = $blocks_id;
     $context['block_position'] = $block_position;
+    $context['page_block'] = $context['post']->get_field( $blocks_id )[ $block_position ];
+    $context['block_unique_class'] = $context['page_block']['acf_fc_layout'] . '-' . $block_position . '-' . $context['post']->id;
+
     if (file_exists($full_layout_directory . $new_layout_file . '.twig')) {
       Timber::render($full_layout_directory . $new_layout_file . '.twig', $context, false);
     }
@@ -40,6 +43,11 @@ class Kili_Layout {
       $full_layout_directory = get_template_directory() . $layout_directory;
       if ( file_exists( $full_layout_directory . $new_layout_file . '.twig' ) ) {
         Timber::render( $full_layout_directory . $new_layout_file . '.twig', $context, false );
+      }
+      else {
+        echo "<section class='kili-missing-block'><div class='container soft--ends'><b>"
+          . __( 'Notice', 'kiliframework' ) . ":</b> " . __( 'No block template found', 'kiliframework' ) . ", " . __( 'please create file', 'kiliframework' ) 
+          . " $new_layout_file.twig</div></section>";
       }
     }
   }
