@@ -10,7 +10,7 @@ class Kili_Dynamic_Styles {
   public function __construct() {
     $this->base_styles = '';
     $this->style_dir = get_stylesheet_directory() . '/dist/styles/';
-    $this->style_file_name = $style_dir . 'block_styles.css';
+    $this->style_file_name = $this->style_dir . 'block_styles.css';
   }
 
   /**
@@ -46,7 +46,7 @@ class Kili_Dynamic_Styles {
     foreach ( $fields as $key => $field ) {
       if ( isset( $field['kili_block_builder'] ) && is_array( $field['kili_block_builder'] ) ) {
         foreach ( $field['kili_block_builder'] as $page_key => $page_field ) {
-          $style .= replace_placeholders( $page_field, $field['page_id'], $page_field['acf_fc_layout'], $page_key );
+          $style .= $this->replace_placeholders( $page_field, $field['page_id'], ( isset ( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
         }
       }
     }
@@ -63,7 +63,7 @@ class Kili_Dynamic_Styles {
       }
     }
     if ( $overwrite ) {
-      file_put_contents( $this->style_file_name, clean_style( $style ) );
+      file_put_contents( $this->style_file_name, $this->clean_style( $style ) );
     }
   }
 

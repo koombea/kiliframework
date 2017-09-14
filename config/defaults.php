@@ -7,7 +7,7 @@
  * and other configurations used by Kili.
  *
  */
-include_once (get_template_directory() .'/app/helpers/theme-data/class-theme-data.php');
+include_once(get_template_directory() .'/app/helpers/theme-data/class-theme-data.php');
 
 //................................................................
 // Set variables
