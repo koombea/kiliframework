@@ -1,0 +1,92 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-14 22:23+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: index.php:11
+msgid "Sorry, no results were found."
+msgstr ""
+
+#. Name of the template
+#: app/controllers/class-kili-framework.php:91
+msgid "Layout Builder"
+msgstr ""
+
+#: app/controllers/class-kili-framework.php:14
+#, php-format
+msgid "Error locating %s for inclusion"
+msgstr ""
+
+#: app/controllers/class-kili-router.php:110
+#, php-format
+msgid "%s Post"
+msgid_plural "%s Posts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/controllers/class-kili-theme-blocks.php:57
+msgid ""
+"Place and edit your blocks. Add photos to your blocks, change text colors "
+"and fonts."
+msgstr ""
+
+#: app/controllers/class-kili-theme-blocks.php:65
+msgid "Add Section"
+msgstr ""
+
+#: app/controllers/class-kili-theme-blocks.php:85
+msgid "Kili Framework page builder"
+msgstr ""
+
+#: app/helpers/flexible-content-modal/class-acf-field-flexible-content.php:25
+msgid "Layout builder support for acf free"
+msgstr ""
+
+#: app/helpers/kili-layout/class-kili-layout.php:49
+msgid "Notice"
+msgstr ""
+
+#: app/helpers/kili-layout/class-kili-layout.php:49
+msgid "No block template found"
+msgstr ""
+
+#: app/helpers/kili-layout/class-kili-layout.php:49
+msgid "please create file"
+msgstr ""
+
+#: app/views/templates/entry-meta.php:2
+msgid "By"
+msgstr ""
+
+#. Name of the theme
+msgid "Kiliframework"
+msgstr ""
+
+#. Description of the theme
+msgid ""
+"Kili is a powerful open source development framework for complimenting your "
+"themes."
+msgstr ""
+
+#. URI of the theme
+msgid "https://github.com/koombea/kiliframework"
+msgstr ""
+
+#. Author of the theme
+msgid "Koombea"
+msgstr ""
+
+#. Author URI of the theme
+msgid "https://koombea.com"
+msgstr ""
