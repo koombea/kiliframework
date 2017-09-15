@@ -55,7 +55,7 @@ if ( !class_exists('Kili_Framework') ) {
       $this->base_blocks_style = '';
 
       $this->add_actions();
-      if ( $this->verify_timber_installation() ) {
+      if ( class_exists( 'Timber' ) ) {
         add_filter( 'timber_context', array( $this, 'add_to_context' ) );
         Timber::$dirname = array('blocks/styles', 'views', 'views/partials', 'views/layout');
       }
@@ -170,15 +170,6 @@ if ( !class_exists('Kili_Framework') ) {
         KILI_Layout::render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
         $block_position++;
       endwhile;
-    }
-
-    /**
-     * Check if Timber is activated
-     *
-     * @return boolean If timber is enabled or no
-     */
-    public function verify_timber_installation() {
-      return class_exists( 'Timber' );
     }
 
     /**
