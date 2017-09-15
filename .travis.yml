@@ -31,3 +31,6 @@ script:
     - if [[ "$SNIFF" == "1" ]]; then jshint .; fi
     - if [[ "$SNIFF" == "1" ]]; then jscs .; fi
     - if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n . --standard=./codesniffer.ruleset.xml --extensions=php; fi
+
+notifications:
+    slack: kiliframework:lbyZUFKC9CaDbk45ZI6kVYoY 
