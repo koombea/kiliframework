@@ -13,6 +13,15 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 */
 
 .kili-missing-block {
-  background-color: #DD4F3E;
+  background-color: #d6ba46;
   color: #FFFFFF;
+}
+
+.kili-container {
+  margin: auto;
+  max-width: 1280px;
+}
+
+.kili-soft {
+  padding: 15px;
 }
