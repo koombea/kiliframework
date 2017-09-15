@@ -23,7 +23,7 @@ class Kili_Search_Filter {
    */
   public function search_filter($query) {
     if ( $query->is_search && !is_admin() ) {
-      $post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : ( isset( $_POST['post_type'] ) ? $_POST['post_type'] : 'post');
+      $post_type = isset( $_GET['post_type'] ) ? sanitize_key( $_GET['post_type'] ) : ( isset( $_POST['post_type'] ) ? sanitize_key( $_POST['post_type'] ) : 'post');
       $query->set( 'post_type', array( $post_type ) );
     }
     return $query;

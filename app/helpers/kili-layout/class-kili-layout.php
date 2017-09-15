@@ -45,9 +45,10 @@ class Kili_Layout {
         Timber::render( $full_layout_directory . $new_layout_file . '.twig', $context, false );
       }
       else {
-        echo "<section class='kili-missing-block'><div class='container soft--ends'><b>"
-          . __( 'Notice', 'kiliframework' ) . ":</b> " . __( 'No block template found', 'kiliframework' ) . ", " . __( 'please create file', 'kiliframework' ) 
-          . " $new_layout_file.twig</div></section>";
+        $notice = "<section class='kili-missing-block'><div class='container soft--ends'><b>" .
+          __( 'Notice', 'kiliframework' ) . ":</b> " . __( 'No block template found', 'kiliframework' ) . ", " . __( 'please create file', 'kiliframework' ) .
+          " $new_layout_file.twig</div></section>";
+        echo $notice;
       }
     }
   }

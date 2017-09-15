@@ -9,11 +9,10 @@ include_once( get_template_directory() . '/config/defaults.php' );
 include_once( get_template_directory() . '/app/controllers/class-kili-router.php' );
 
 // Autoload Helpers.
-foreach ( glob(get_template_directory() . '/app/helpers/*/*.php') as $module ) {
-  if ( !$modulepath = $module ) {
-    trigger_error(sprintf(__('Error locating %s for inclusion', 'kiliframework'), $module), E_USER_ERROR);
+foreach ( glob( get_template_directory() . '/app/helpers/*/*.php' ) as $module ) {
+  if ( file_exists( $module ) ) {
+    require_once( $module );
   }
-  require_once( $modulepath );
 }
 unset($module, $filepath);
 
@@ -209,7 +208,8 @@ if ( !class_exists('Kili_Framework') ) {
      * @return void
      */
     public function custom_asset_args( $base_folder ) {
-      echo get_template_directory_uri() . '/dist/styles/' . $base_folder;
+      $folder = get_template_directory_uri() . '/dist/styles/' . $base_folder;
+      echo $folder;
     }
 
     /**
