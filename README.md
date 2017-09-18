@@ -7,25 +7,24 @@ Kili es un framework para desarrollar temas en WordPress de forma agil y modular
 
 ## Instalacion
 
-Los requerimientos son los mismos que tiene WordPress, ya que Kili es un framework para temas de WordPress [Ver acá](https://wordpress.org/about/requirements/)
+Los requerimientos son los mismos que tiene WordPress, ya que Kili es un framework para temas de WordPress. Puedes verlos [acá](https://wordpress.org/about/requirements/)
 
 Puedes instalar Kili como un tema normal de WordPress. Puedes ver los métodos de instalacion de un tema [acá](http://www.wpbeginner.com/beginners-guide/how-to-install-a-wordpress-theme/)
 
 Después de su instalación se solicitan un par de plugins necesarios para su funcionamiento, Advanced Custom Fields y Timber
 
-[Advanced Custom Fields](https://github.com/AdvancedCustomFields/acf)
+* [Advanced Custom Fields](https://github.com/AdvancedCustomFields/acf)
+* [Timber](https://github.com/timber/timber)
 
-[Timber](https://github.com/timber/timber)
-
-[Instalar un plugin en WordPress](http://www.wpbeginner.com/beginners-guide/step-by-step-guide-to-install-a-wordpress-plugin-for-beginners/)
+[Cómo instalar un plugin en WordPress](http://www.wpbeginner.com/beginners-guide/step-by-step-guide-to-install-a-wordpress-plugin-for-beginners/)
 
 ## Desarrollar un tema hijo
 
-Ve al [Wiki][wiki] para ver mas detalles
+Ve al [Wiki](https://github.com/koombea/kiliframework/wiki) para ver mas detalles
 
 ## Contributing
 
-1. Fork it (<https://github.com/koombea/kiliframework#fork-destination-box>)
+1. Fork it (<https://github.com/koombea/kiliframework>)
 2. Create your feature branch (`git checkout -b feature/fooBar`) or (`git flow feature start fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`) or (`git flow feature publish fooBar`)
