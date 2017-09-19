@@ -1,7 +1,10 @@
 <?php
 /**
  * Handle the site's search filter
- *
+ */
+
+/**
+ * Class for handling search filter
  */
 class Kili_Search_Filter {
 	/**
@@ -20,7 +23,7 @@ class Kili_Search_Filter {
 	/**
 	 * Filters the search query by its post type
 	 *
-	 * @param object $query The search query object
+	 * @param object $query The search query object.
 	 * @return object Search query object with the post type filter
 	 */
 	public function search_filter( $query ) {
@@ -47,13 +50,13 @@ class Kili_Search_Filter {
 	 * Join posts and postmeta tables
 	 * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_join
 	 *
-	 * @param object $join The search query string
+	 * @param object $join The search query string.
 	 * @return string Modified search query string
 	 */
 	public function cf_search_join( $join ) {
 		global $wpdb;
 		if ( is_search() ) {
-			$join .= ' LEFT JOIN '.$wpdb->postmeta. ' ON '. $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
+			$join .= ' LEFT JOIN ' . $wpdb->postmeta . ' ON '. $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
 		}
 		return $join;
 	}
@@ -62,15 +65,15 @@ class Kili_Search_Filter {
 	 * Modify the search query with posts_where
 	 * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_where
 	 *
-	 * @param object $where The search query string
+	 * @param object $where The search query string.
 	 * @return string Modified search query string
 	 */
 	public function cf_search_where( $where ) {
 		global $pagenow, $wpdb;
 		if ( is_search() ) {
 			$where = preg_replace(
-				"/\(\s*" . $wpdb->posts . ".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
-				"(" . $wpdb->posts . ".post_title LIKE $1) OR (" . $wpdb->postmeta . ".meta_value LIKE $1)", $where );
+				'/\(\s*' . $wpdb->posts . ".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
+				'(' . $wpdb->posts . '.post_title LIKE $1) OR (' . $wpdb->postmeta . '.meta_value LIKE $1)', $where );
 		}
 		return $where;
 	}
@@ -79,7 +82,7 @@ class Kili_Search_Filter {
 	 * Prevent duplicates
 	 * http://codex.wordpress.org/Plugin_API/Filter_Reference/posts_distinct
 	 *
-	 * @param object $where The search query string
+	 * @param object $where The search query string.
 	 * @return string Modified search query string
 	 */
 	public function cf_search_distinct( $where ) {
@@ -114,7 +117,7 @@ class Kili_Search_Filter {
 		if ( is_search() && ! is_admin() ) {
 			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
 				if ( strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), "/{$wp_rewrite->search_base}/" ) === false && strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), '&' ) === false ) {
-					wp_redirect( get_search_link() );
+					wp_safe_redirect( get_search_link() );
 					exit();
 				}
 			}
@@ -137,7 +140,7 @@ class Kili_Search_Filter {
 	 * @return void
 	 */
 	public function search_base_slug() {
-		$search_slug = __( 'search' ); // change slug name
+		$search_slug = __( 'search' ); // change slug name.
 		$GLOBALS['wp_rewrite']->search_base = $search_slug;
 		$GLOBALS['wp_rewrite']->flush_rules();
 	}

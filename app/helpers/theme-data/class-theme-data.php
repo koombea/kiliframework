@@ -1,15 +1,18 @@
 <?php
 /**
  * Obtain theme relevant data
- *
+ */
+
+/**
+ * Class for obtaining theme data
  */
 final class Theme_Data {
 	/**
 	 * Get theme data
 	 *
-	 * @param string $type theme type. Accepted values: 'child'(default), 'parent'
-	 * @param string $theme_dir Theme directory
-	 * @param string $stylesheet Stylesheet route
+	 * @param string $type theme type. Accepted values: 'child'(default), 'parent'.
+	 * @param string $theme_dir Theme directory.
+	 * @param string $stylesheet Stylesheet route.
 	 * @return array Theme data
 	 */
 	public function kili_get_theme_data( $type = 'child', $theme_dir = null, $stylesheet = null ) {
@@ -17,7 +20,7 @@ final class Theme_Data {
 		if ( function_exists( 'wp_get_theme' ) ) {
 			$tmp = wp_get_theme();
 			if ( null === $theme_dir ) {
-				$theme_dir = strcasecmp( $type,'parent' ) == 0 ? get_template_directory() : get_stylesheet_directory();
+				$theme_dir = strcasecmp( $type,'parent' ) === 0 ? get_template_directory() : get_stylesheet_directory();
 			}
 		}
 
@@ -68,8 +71,8 @@ final class Theme_Data {
 	/**
 	 * Scans directory for files
 	 *
-	 * @param string $dir Directory route
-	 * @param array $excl Excluded file names
+	 * @param string $dir Directory route.
+	 * @param array $excl Excluded file names.
 	 * @return array Files array
 	 */
 	public static function kili_scandir( $dir, $excl = array() ) {

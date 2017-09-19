@@ -4,10 +4,11 @@
  *
  * @package kiliframework
  */
+
 get_template_part( 'app/views/templates/page', 'header' );
-if (!have_posts()) : ?>
+if ( ! have_posts() ) : ?>
   <div class="alert alert-warning">
-    <?php __('Sorry, no results were found.', 'kiliframework'); ?>
+    <?php __( 'Sorry, no results were found.', 'kiliframework' ); ?>
   </div>
 <?php get_search_form();
 endif;

@@ -2,6 +2,7 @@
 /**
  * Define the main class and its actions
  *
+ * @package kiliframework
  */
 
 /**
@@ -149,7 +150,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				'flexible_content_key' => 'kili_field_container',
 				'flexible_content_button_label' => 'Add New Section',
 				'blocks_pages_dir' => get_stylesheet_directory() . '/data/blocks/pages/',
-				'excluded_page_blocks' => array()
+				'excluded_page_blocks' => array(),
 			);
 			$this->default_kili_blocks->add_blocks_to_wp( $default_block );
 		}
@@ -157,7 +158,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Add blocks to admin layout builder
 		 *
-		 * @param array $block_options Array of block options
+		 * @param array $block_options Array of block options.
 		 * @return void
 		 */
 		public function kili_pages_blocks_init_admin( $block_options = array() ) {
@@ -169,7 +170,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Render theme pages from blocks
 		 *
-		 * @param array $presets Blocks settings
+		 * @param array $presets Blocks settings.
 		 * @return void
 		 */
 		public function render_pages( $presets ) {
@@ -200,8 +201,8 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				foreach ( $settings as $key => $value ) {
 					$context[ $key ] = $value;
 				}
-
-				$all_pages = get_posts( $args );
+				$pages_query = new WP_Query( $args );
+				$all_pages = $pages_query->get_posts( $args );
 				foreach ( $all_pages as $key => $page ) {
 					$page_fields = get_fields( $page->ID );
 					$page_fields['page_id'] = $page->ID;
@@ -216,7 +217,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Render page blocks
 		 *
-		 * @param array $context Timber pages context
+		 * @param array $context Timber pages context.
 		 * @return void
 		 */
 		function page_blocks_content( $context ) {
@@ -230,17 +231,17 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Add data to timber context
 		 *
-		 * @param array $context Timber pages context
+		 * @param array $context Timber pages context.
 		 * @return array Context variable updated
 		 */
 		public function add_to_context( $context ) {
-			// Add extra data
+			// Add extra data.
 			$context['options'] = function_exists( 'get_fields' ) ? get_fields( 'option' ) : '';
-			// Menu
-			$context['menu']['primary'] = new TimberMenu('primary_navigation');
-			// Site info
+			// Menu.
+			$context['menu']['primary'] = new TimberMenu( 'primary_navigation' );
+			// Site info.
 			$context['site'] = $context['site'];
-			// Assets path
+			// Assets path.
 			$context['dist']['images'] = $context['theme']->link . '/dist/images/';
 			$context['dist']['css'] = $context['theme']->link . '/dist/styles/';
 			$context['dist']['js'] = $context['theme']->link . '/dist/scripts/';
@@ -249,7 +250,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			add_action( 'custom_asset', array( $this, 'custom_asset_args' ), 10, 2 );
 			if ( function_exists( 'icl_get_languages' ) ) {
 				$languages = icl_get_languages( 'skip_missing=0&orderby=code' );
-				if( ! empty( $languages ) ) {
+				if ( ! empty( $languages ) ) {
 					$context['languages'] = $languages;
 				}
 			}
@@ -259,7 +260,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Set the custom assets
 		 *
-		 * @param string $base_folder Base folder
+		 * @param string $base_folder Base folder.
 		 * @return void
 		 */
 		public function custom_asset_args( $base_folder ) {

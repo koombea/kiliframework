@@ -1,6 +1,7 @@
 <?php
 /**
  * Load Kili Framework functions
+ * @package kiliframework
  */
 
  /**

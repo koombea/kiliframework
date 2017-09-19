@@ -1,7 +1,10 @@
 <?php
 /**
  * Handle page blocks
- *
+ */
+
+/**
+ * Class for handling theme blocks
  */
 class Kili_Theme_Blocks {
 	/**
@@ -21,7 +24,7 @@ class Kili_Theme_Blocks {
 	/**
 	 * Add blocks to pages
 	 *
-	 * @param array $location Block options
+	 * @param array $location Block options.
 	 * @return void
 	 */
 	public function add_blocks_to_wp( $location ) {
@@ -95,7 +98,7 @@ class Kili_Theme_Blocks {
 
 				$location_index = 0;
 				foreach ( $this->supported_formats as $format ) {
-					if( empty( $location[ $format ] ) || ! isset( $location[ $format ] ) ) continue;
+					if ( empty( $location[ $format ] ) || ! isset( $location[ $format ] ) ) continue;
 					$meta['location'][ $location_index ] = array();
 					foreach ( $location[ $format ] as $place ) {
 						$meta['location'][ $location_index ][] = array(
@@ -116,8 +119,8 @@ class Kili_Theme_Blocks {
 	/**
 	 * Obtain the layout of a block
 	 *
-	 * @param string $blocks_path Block files path
-	 * @param string $file File name
+	 * @param string $blocks_path Block files path.
+	 * @param string $file File name.
 	 * @return array Array with block layout
 	 */
 	private function get_file_layout( $blocks_path, $file ) {
@@ -132,13 +135,13 @@ class Kili_Theme_Blocks {
 			} else {
 				$current_layout = array(
 					array(
-					'key' => $json_to_php[0]['key'],
-					'name' => str_replace( ' ','_',strtolower( $json_to_php[0]['title'] ) ),
-					'label' => $json_to_php[0]['title'],
-					'display' => 'block',
-					'sub_fields' => $json_to_php[0]['fields'],
-					'min' => '',
-					'max' => '',
+						'key' => $json_to_php[0]['key'],
+						'name' => str_replace( ' ','_',strtolower( $json_to_php[0]['title'] ) ),
+						'label' => $json_to_php[0]['title'],
+						'display' => 'block',
+						'sub_fields' => $json_to_php[0]['fields'],
+						'min' => '',
+						'max' => '',
 					)
 				);
 			}
@@ -165,9 +168,9 @@ class Kili_Theme_Blocks {
 	/**
 	 * Get blocks layout
 	 *
-	 * @param array $blocks_path Block files path
-	 * @param boolean $add_default_blocks Use default blocks (default:false)
-	 * @param string $excluded_file_name Exclude file name
+	 * @param array $blocks_path Block files path.
+	 * @param boolean $add_default_blocks Use default blocks (default:false).
+	 * @param string $excluded_file_name Exclude file name.
 	 * @return array Array with blocks layout
 	 */
 	private function get_block_layout( $blocks_path, $add_default_blocks = false, $excluded_file_name = '' ) {
@@ -192,8 +195,8 @@ class Kili_Theme_Blocks {
 	/**
 	 * Get block structure from json files
 	 *
-	 * @param string $directory Blocks directory
-	 * @param array $excluded Excluded blocks
+	 * @param string $directory Blocks directory.
+	 * @param array $excluded Excluded blocks.
 	 * @return array Array with blocks structure
 	 */
 	private function get_acf_json_files( $directory, $excluded = array() ) {
@@ -207,7 +210,7 @@ class Kili_Theme_Blocks {
 					$real_path = $settings_path_child;
 				}
 				$setting_name = explode( '.', $setting );
-				if ( in_array( $setting_name[0], $excluded ) === false ) {
+				if ( in_array( $setting_name[0], $excluded, true ) === false ) {
 					array_push( $settings, $real_path . $setting );
 				}
 			}

@@ -1,7 +1,10 @@
 <?php
 /**
  * ACF Flexible Content Modal
- *
+ */
+
+/**
+ * Class for handle flexible content modal
  */
 class Flexible_Content_Modal {
 	/**
@@ -15,7 +18,7 @@ class Flexible_Content_Modal {
 	 * Initialize function
 	 */
 	public function init() {
-		// Hooks
+		// Hooks.
 		add_action( 'admin_init', array( $this, 'admin_css' ), 1, 999 );
 		add_action( 'admin_init', array( $this, 'admin_script' ), 1, 999 );
 	}
@@ -26,7 +29,7 @@ class Flexible_Content_Modal {
 	 * @return void
 	 */
 	public function activate() {
-		//no code
+		// no code.
 	}
 
 	/**
@@ -35,7 +38,7 @@ class Flexible_Content_Modal {
 	 * @return void
 	 */
 	public function deactivate() {
-		//no code
+		// no code.
 	}
 
 	/**
@@ -68,7 +71,7 @@ class Flexible_Content_Modal {
    * @return void
    */
   public function theme_css() {
-    //no code
+    // no code.
   }
 
   /**
@@ -77,6 +80,6 @@ class Flexible_Content_Modal {
    * @return void
    */
   public function theme_script() {
-    //no code
+    // no code.
   }
 }
