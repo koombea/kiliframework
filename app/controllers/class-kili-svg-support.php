@@ -1,7 +1,10 @@
 <?php
 /**
  * For SVG files support
- *
+ */
+
+/**
+ * Class for handling SVG files support
  */
 class Kili_Svg_Support {
 
@@ -21,7 +24,7 @@ class Kili_Svg_Support {
 	 */
 	public function add_filters() {
 		$wordpress_version = get_bloginfo( 'version' );
-		if ( $wordpress_version < "4.7.3" ) {
+		if ( $wordpress_version < '4.7.3' ) {
 			add_filter( 'wp_check_filetype_and_ext', array( $this, 'ksource_disable_real_mime_check' ), 10, 4 );
 		}
 
@@ -34,19 +37,19 @@ class Kili_Svg_Support {
 	/**
 	 * Allow SVG uploads
 	 *
-	 * @param array $existing_mime_types Current site mime types
+	 * @param array $existing_mime_types Current site mime types.
 	 * @return array Array with svg type included
 	 */
 	public function ksource_allow_svg_uploads( $existing_mime_types = array() ) {
 		return $existing_mime_types + array(
-			'svg' => 'image/svg+xml'
+			'svg' => 'image/svg+xml',
 		);
 	}
 
 	/**
 	 * Get svg file dimensions
 	 *
-	 * @param string $svg File full path
+	 * @param string $svg File full path.
 	 * @return object Object with file dimensions
 	 */
 	public function ksource_get_dimensions( $svg ) {
@@ -56,20 +59,20 @@ class Kili_Svg_Support {
 		$height = (string) $attributes->height;
 		return (object) array(
 			'width' => $width,
-			'height' => $height
+			'height' => $height,
 		);
 	}
 
 	/**
 	 * Set dimensions for the file
 	 *
-	 * @param array $response http response
-	 * @param object $attachment file attachment object
-	 * @param mixed $meta meta for svg object
+	 * @param array $response http response.
+	 * @param object $attachment file attachment object.
+	 * @param mixed $meta meta for svg object.
 	 * @return array Modified response
 	 */
 	public function ksource_set_dimensions( $response, $attachment, $meta ) {
-		if ( empty( $response['sizes'] ) && $response['mime'] === 'image/svg+xml' ) {
+		if ( $response['mime'] === 'image/svg+xml' && empty( $response['sizes'] ) ) {
 			$svg_file_path = get_attached_file( $attachment->ID );
 			$dimensions = $this->ksource_get_dimensions( $svg_file_path );
 			$response['sizes'] = array(
@@ -90,9 +93,9 @@ class Kili_Svg_Support {
 	 * @return void
 	 */
 	public function ksource_administration_styles() {
-		// Media Listing Fix
+		// Media Listing Fix.
 		wp_add_inline_style( 'wp-admin', ".media .media-icon img[src$='.svg'] { width: auto; height: auto; }" );
-		// Featured Image Fix
+		// Featured Image Fix.
 		wp_add_inline_style( 'wp-admin', "#postimagediv .inside img[src$='.svg'] { width: 100%; height: auto; }" );
 	}
 
@@ -108,10 +111,10 @@ class Kili_Svg_Support {
 	/**
 	 * Disable mime type check for WordPress versions < 4.7.3
 	 *
-	 * @param array $data File data
-	 * @param array $file File object
-	 * @param string $filename File name
-	 * @param array $mimes Mime types
+	 * @param array $data File data.
+	 * @param array $file File object.
+	 * @param string $filename File name.
+	 * @param array $mimes Mime types.
 	 * @return array Array with all the values
 	 */
 	public function ksource_disable_real_mime_check( $data, $file, $filename, $mimes ) {

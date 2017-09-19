@@ -1,6 +1,10 @@
 <?php
 /**
  * Handle dynamic block styles
+ */
+
+/**
+ * Class for dynamic block styles
  *
  */
 class Kili_Dynamic_Styles {
@@ -25,6 +29,9 @@ class Kili_Dynamic_Styles {
 	 */
 	public $style_file_name;
 
+	/**
+	 * Class constructor
+	 */
 	public function __construct() {
 		$this->base_styles = '';
 		$this->style_dir = get_stylesheet_directory() . '/dist/styles/';
@@ -34,7 +41,7 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Set the base styles string
 	 *
-	 * @param string $styles Your styles string
+	 * @param string $styles String containing your own style base.
 	 * @return void
 	 */
 	public function set_base_styles( $styles ) {
@@ -54,7 +61,7 @@ class Kili_Dynamic_Styles {
 	 * Read block custom fields for styling and generate css for those blocks
 	 * You should provide the base styles (this class set_base_styles function) before using this method
 	 *
-	 * @param array $fields
+	 * @param array $fields ACF Block fields.
 	 * @return void
 	 */
 	public function process_blocks_styles( $fields ) {
@@ -64,7 +71,7 @@ class Kili_Dynamic_Styles {
 		foreach ( $fields as $key => $field ) {
 			if ( isset( $field['kili_block_builder'] ) && is_array( $field['kili_block_builder'] ) ) {
 				foreach ( $field['kili_block_builder'] as $page_key => $page_field ) {
-					$style .= $this->replace_placeholders( $page_field, $field['page_id'], ( isset ( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
+					$style .= $this->replace_placeholders( $page_field, $field['page_id'], ( isset( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
 				}
 			}
 		}
@@ -87,19 +94,19 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Minifies css and removes empty rules
 	 *
-	 * @param string $css CSS string to be cleaned
+	 * @param string $css CSS string to be cleaned.
 	 * @return string Clean CSS string
 	 */
 	private function clean_style( $css ) {
-		// Remove comments
+		// Remove comments.
 		$css = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $css );
-		// Remove space after colons
+		// Remove space after colons.
 		$css = str_replace( ': ', ':', $css );
-		// Remove whitespaces
+		// Remove whitespaces.
 		$css = str_replace( array( "\r\n", "\r", "\n", "\t", '  ' ), '', $css );
-		// Collapse adjacent spaces into a single space
-		$css = preg_replace( " {2,}", ' ',$css );
-		// Remove spaces that might still be left where we know they aren't needed
+		// Collapse adjacent spaces into a single space.
+		$css = preg_replace( ' {2,}', ' ',$css );
+		// Remove spaces that might still be left where we know they aren't needed.
 		$css = str_replace( '} ', '}', $css );
 		$css = str_replace( '{ ', '{', $css );
 		$css = str_replace( '; ', ';', $css );
@@ -108,7 +115,7 @@ class Kili_Dynamic_Styles {
 		$css = str_replace( ' {', '{', $css );
 		$css = str_replace( ' ;', ';', $css );
 		$css = str_replace( ' ,', ',', $css );
-		// remove empty rules
+		// remove empty rules.
 		$css = preg_replace( '/\.([\w,\d]+)((\s+)((\.*)[\w,\d,-]+))*{}/', '', $css );
 		$css = preg_replace( '/@([\w,\s,\d,\-,:,\(,\)]+){}/', '', $css );
 		return $css;
@@ -117,10 +124,10 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Replace block placeholders with the real styles
 	 *
-	 * @param array $field Block field
-	 * @param mixed $page_id Page id
-	 * @param string $layout Block layout
-	 * @param mixed $block_position Block position
+	 * @param array $field Block field.
+	 * @param mixed $page_id Page id.
+	 * @param string $layout Block layout.
+	 * @param mixed $block_position Block position.
 	 * @return string CSS string for the block field
 	 */
 	private function replace_placeholders( $field, $page_id, $layout, $block_position ) {
@@ -144,17 +151,17 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Get the replacement for provided field placeholder
 	 *
-	 * @param array $array Placeholders array
-	 * @param string $prefix Prefix for replacement (default:'')
+	 * @param array $array Placeholders array.
+	 * @param string $prefix Prefix for replacement (default:'').
 	 * @return array Array with replacements done
 	 */
 	private function get_array_replacement( $array, $prefix = '' ) {
 		$replacements = array();
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) ) {
-				$replacements =  array_merge( $replacements, get_array_replacement( $value, $key . '_' ) );
+				$replacements = array_merge( $replacements, get_array_replacement( $value, $key . '_' ) );
 			} elseif ( is_string( $value ) && strcasecmp( trim( $value ), '' ) !== 0 ) {
-				$replacements['{{'.$prefix.$key.'}}'] = trim( $value );
+				$replacements[ '{{' . $prefix.$key . '}}' ] = trim( $value );
 			}
 		}
 		return $replacements;

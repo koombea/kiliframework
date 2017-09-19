@@ -1,7 +1,10 @@
 <?php
 /**
  * Handle WordPress Routes
- *
+ */
+
+/**
+ * Class for handling routes
  */
 class Kili_Router {
 	/**
@@ -36,7 +39,7 @@ class Kili_Router {
 				} else {
 					$settings['template'] = locate_template( 'views/category.twig' ) ? 'category' : 'archive';
 				}
-			} elseif( is_tag() ) {
+			} elseif ( is_tag() ) {
 				$tag = get_queried_object();
 				$settings['current_tag'] = single_tag_title( '', false );
 				if ( locate_template( 'views/tag' . $tag->slug . '.twig' ) ) {
@@ -44,14 +47,14 @@ class Kili_Router {
 				} else {
 					$settings['template'] = locate_template( 'views/tag.twig' ) ? 'tag' : 'archive';
 				}
-			} elseif( is_date() ) {
+			} elseif ( is_date() ) {
 				$settings['template'] = locate_template( 'views/date.twig' ) ? 'date' : 'archive';
 			} elseif ( is_author() ) {
 				$settings['author'] = new TimberUser( $wp_query->query_vars['author'] );
 				$settings['author_extra'] = get_user_by( 'id', $wp_query->query_vars['author'] );
 				$settings['author_posts_number'] = get_the_author_posts();
 				$author_roles = get_user_by( 'slug', get_query_var( 'author_name' ) )->roles ;
-				if ( in_array( 'subscriber', $author_roles ) ) {
+				if ( in_array( 'subscriber', $author_roles, true ) ) {
 					$settings['template'] = 'error/404';
 				} else {
 					$settings['template'] = locate_template( 'views/author.twig' ) ? 'author' : 'archive';
@@ -62,7 +65,7 @@ class Kili_Router {
 				$taxonomy = $queried_object->taxonomy;
 				$term = get_term( $term_id, $taxonomy );
 				if ( locate_template( 'views/taxonomy-' . $taxonomy . '-' . $term->slug . '.twig' ) ) {
-					$settings['template'] ='taxonomy-' . $taxonomy . '-' . $term->slug;
+					$settings['template'] = 'taxonomy-' . $taxonomy . '-' . $term->slug;
 				} elseif ( locate_template( 'views/taxonomy-' . $taxonomy . '.twig' ) ) {
 					$settings['template'] = 'taxonomy-' . $taxonomy;
 				} elseif ( locate_template( 'views/taxonomy.twig' ) ) {
@@ -92,14 +95,11 @@ class Kili_Router {
 			}
 		}
 		if ( is_home() || is_category() || is_tag() || is_author() ) {
-			if ( ! isset( $paged ) || ! $paged ) {
-				$paged = 1;
-			}
 			$args = array(
 				'post_type' => 'post',
 				'post_status' => 'publish',
 				'posts_per_page' => get_option( 'posts_per_page' ),
-				'paged' => $paged,
+				'paged' => isset( $paged ) ? $paged : 1,
 			);
 			if ( is_tag() ) {
 				$args['tag'] = sanitize_title( single_tag_title( '', false ) );
@@ -122,6 +122,7 @@ class Kili_Router {
 			$current_pagination = $settings['pagination']['current'];
 			$current_offset = $posts_length * $current_pagination;
 			$total_posts = $posts_length * $settings['pagination']['total'];
+			//translators: placeholders are for post quantity.
 			$pluralize = sprintf( _n( '%s Post', '%s Posts', $total_posts, 'kiliframework' ), number_format_i18n( $total_posts ) );
 			$settings['posts_length'] = $posts_length;
 			$settings['current_pagination'] = $current_pagination;
@@ -140,17 +141,19 @@ class Kili_Router {
 	/**
 	 * Verify if post is custom post type
 	 *
-	 * @param [type] $post Post object. default: global post from WordPress
+	 * @param object $post Post object. default: global post from WordPress.
 	 * @return boolean
 	 */
 	private function is_custom_post_type( $post = null ) {
-		$all_custom_post_types = get_post_types( array( '_builtin' => false ) );
-		// there are no custom post types
+		$all_custom_post_types = get_post_types( array(
+			'_builtin' => false
+		) );
+		// there are no custom post types.
 		if ( empty( $all_custom_post_types ) ) return false;
 		$custom_types      = array_keys( $all_custom_post_types );
 		$current_post_type = get_post_type( $post );
-		// could not detect current type
+		// could not detect current type.
 		if ( ! $current_post_type ) return false;
-		return in_array( $current_post_type, $custom_types );
+		return in_array( $current_post_type, $custom_types, true );
 	}
 }
