@@ -1,6 +1,8 @@
 <?php
 /**
  * ACF Flexible Content Modal
+ *
+ * @package kiliframework
  */
 
 /**
@@ -65,21 +67,21 @@ class Flexible_Content_Modal {
 		wp_enqueue_script( 'acf-fc-modal', FRAMEWORK_URL . 'app/helpers/flexible-content-modal/js/script.min.js', array( 'acf-input' ) );
 	}
 
-  /**
-   * Register Theme Stylesheets
-   *
-   * @return void
-   */
-  public function theme_css() {
-    // no code.
-  }
+	/**
+	 * Register Theme Stylesheets
+	 *
+	 * @return void
+	 */
+	public function theme_css() {
+		// no code.
+	}
 
-  /**
-   * Register Theme Scripts
-   *
-   * @return void
-   */
-  public function theme_script() {
-    // no code.
-  }
+	/**
+	 * Register Theme Scripts
+	 *
+	 * @return void
+	 */
+	public function theme_script() {
+		// no code.
+	}
 }

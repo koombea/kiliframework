@@ -1,6 +1,8 @@
 <?php
 /**
  * Manages block rendering
+ *
+ * @package kiliframework
  */
 
 /**

@@ -1,11 +1,12 @@
 <?php
 /**
  * Handle dynamic block styles
+ *
+ * @package kiliframework
  */
 
 /**
  * Class for dynamic block styles
- *
  */
 class Kili_Dynamic_Styles {
 	/**
@@ -67,8 +68,9 @@ class Kili_Dynamic_Styles {
 	public function process_blocks_styles( $fields ) {
 		$style = '';
 		$overwrite = false;
-
-		foreach ( $fields as $key => $field ) {
+		$size = count( $fields );
+		for ( $i = 0; $i < $size; $i++ ) {
+			$field = $fields[ $i ];
 			if ( isset( $field['kili_block_builder'] ) && is_array( $field['kili_block_builder'] ) ) {
 				foreach ( $field['kili_block_builder'] as $page_key => $page_field ) {
 					$style .= $this->replace_placeholders( $page_field, $field['page_id'], ( isset( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
@@ -161,7 +163,7 @@ class Kili_Dynamic_Styles {
 			if ( is_array( $value ) ) {
 				$replacements = array_merge( $replacements, get_array_replacement( $value, $key . '_' ) );
 			} elseif ( is_string( $value ) && strcasecmp( trim( $value ), '' ) !== 0 ) {
-				$replacements[ '{{' . $prefix.$key . '}}' ] = trim( $value );
+				$replacements[ '{{' . $prefix . $key . '}}' ] = trim( $value );
 			}
 		}
 		return $replacements;

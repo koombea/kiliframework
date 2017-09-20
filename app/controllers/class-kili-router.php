@@ -1,6 +1,8 @@
 <?php
 /**
  * Handle WordPress Routes
+ *
+ * @package kiliframework
  */
 
 /**
@@ -11,14 +13,13 @@ class Kili_Router {
 	 * Get current Twig view based on WordPress page hierarchy.
 	 * Aditional add to context required views data.
 	 *
-	 * @param array $presets Preset options for the context
+	 * @param array $presets Preset options for the context.
 	 * @return array View settings
 	 */
 	public function get_current_view_settings( $presets = null ) {
-		global $wp_query, $paged, $post;
+		$globals = Theme_Data::get_wordpress_globals();
 		$settings = array();
 		$settings['post_type'] = get_post_type();
-
 		if ( is_front_page() ) {
 			$settings['template'] = is_home() && locate_template( 'views/home.twig' ) ? 'home' : 'front-page';
 		} elseif ( is_404() ) {
@@ -50,8 +51,8 @@ class Kili_Router {
 			} elseif ( is_date() ) {
 				$settings['template'] = locate_template( 'views/date.twig' ) ? 'date' : 'archive';
 			} elseif ( is_author() ) {
-				$settings['author'] = new TimberUser( $wp_query->query_vars['author'] );
-				$settings['author_extra'] = get_user_by( 'id', $wp_query->query_vars['author'] );
+				$settings['author'] = new TimberUser( $globals['wp_query']->query_vars['author'] );
+				$settings['author_extra'] = get_user_by( 'id', $globals['wp_query']->query_vars['author'] );
 				$settings['author_posts_number'] = get_the_author_posts();
 				$author_roles = get_user_by( 'slug', get_query_var( 'author_name' ) )->roles ;
 				if ( in_array( 'subscriber', $author_roles, true ) ) {
@@ -81,10 +82,9 @@ class Kili_Router {
 			$settings['post'] = new TimberPost();
 			if ( is_single() || is_page() ) {
 				$settings['is_custom_post_type'] = $this->is_custom_post_type();
+				$settings['template'] = is_page() ? ( post_password_required( $globals['post']->ID ) ? 'page-password' : 'page') : ( post_password_required( $globals['post']->ID ) ? 'single-password' : 'single' );
 				if ( $settings['is_custom_post_type'] && locate_template( 'views/single-' . get_post_type() . '.twig' ) ) {
 					$settings['template'] = (is_single() ? 'single-' : 'page-' ) . get_post_type();
-				} else {
-					$settings['template'] = is_page() ? ( post_password_required( $post->ID ) ? 'page-password' : 'page') : (post_password_required( $post->ID ) ? 'single-password' : 'single' );
 				}
 			} else {
 				if ( is_attachment() ) {
@@ -99,7 +99,7 @@ class Kili_Router {
 				'post_type' => 'post',
 				'post_status' => 'publish',
 				'posts_per_page' => get_option( 'posts_per_page' ),
-				'paged' => isset( $paged ) ? $paged : 1,
+				'paged' => isset( $globals['paged'] ) ? $globals['paged'] : 1,
 			);
 			if ( is_tag() ) {
 				$args['tag'] = sanitize_title( single_tag_title( '', false ) );
@@ -108,9 +108,8 @@ class Kili_Router {
 				$args['category_name'] = sanitize_title( single_cat_title( '' , false ) );
 			}
 			if ( is_author() ) {
-				$args['author_name'] = $author->nickname;
+				$args['author_name'] = $settings['author']->nickname;
 			}
-
 			$settings['posts'] = Timber::get_posts( $args );
 			$settings['pagination'] = Timber::get_pagination();
 			$protected = array();
@@ -122,7 +121,7 @@ class Kili_Router {
 			$current_pagination = $settings['pagination']['current'];
 			$current_offset = $posts_length * $current_pagination;
 			$total_posts = $posts_length * $settings['pagination']['total'];
-			//translators: placeholders are for post quantity.
+			// translators: placeholders are for post quantity.
 			$pluralize = sprintf( _n( '%s Post', '%s Posts', $total_posts, 'kiliframework' ), number_format_i18n( $total_posts ) );
 			$settings['posts_length'] = $posts_length;
 			$settings['current_pagination'] = $current_pagination;
@@ -142,18 +141,22 @@ class Kili_Router {
 	 * Verify if post is custom post type
 	 *
 	 * @param object $post Post object. default: global post from WordPress.
-	 * @return boolean
+	 * @return boolean if the post is a custom post type or no
 	 */
 	private function is_custom_post_type( $post = null ) {
 		$all_custom_post_types = get_post_types( array(
-			'_builtin' => false
+			'_builtin' => false,
 		) );
 		// there are no custom post types.
-		if ( empty( $all_custom_post_types ) ) return false;
+		if ( empty( $all_custom_post_types ) ) {
+			return false;
+		}
 		$custom_types      = array_keys( $all_custom_post_types );
 		$current_post_type = get_post_type( $post );
 		// could not detect current type.
-		if ( ! $current_post_type ) return false;
+		if ( ! $current_post_type ) {
+			return false;
+		}
 		return in_array( $current_post_type, $custom_types, true );
 	}
 }

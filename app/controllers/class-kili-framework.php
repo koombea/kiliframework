@@ -162,8 +162,8 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * @return void
 		 */
 		public function kili_pages_blocks_init_admin( $block_options = array() ) {
-			foreach ( $block_options as $key => $value ) {
-				$this->default_kili_blocks->add_blocks_to_wp( $value );
+			foreach ( $block_options as $key ) {
+				$this->default_kili_blocks->add_blocks_to_wp( $block_options[ $key ] );
 			}
 		}
 

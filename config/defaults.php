@@ -1,11 +1,10 @@
 <?php
 /**
  * Base Kili Configurations
- * =============================================================================
- *
  * Sets the default kiliframework configurations such as folder locations, variables
  * and other configurations used by Kili.
  *
+ * @package kiliframework
  */
 
 /**
@@ -33,7 +32,6 @@ $parent_theme_url    = apply_filters( 'frameworkurl', trailingslashit( get_templ
 $parent_theme_dir    = apply_filters( 'frameworkdir', trailingslashit( get_template_directory() ) );
 
 // set as constants.
-
 define( 'THEME_URL', $child_theme_url );           // URL of theme folder (includes child themes).
 define( 'THEME_DIR', $child_theme_dir );           // Server path to theme folder (includes child themes).
 define( 'THEME_NAME', $child_theme_title ); // Theme title.
@@ -47,9 +45,4 @@ define( 'FRAMEWORK_VERSION', $parent_theme_version ); // Framework version numbe
 define( 'FRAMEWORK_DESCRIPTION', $parent_theme_description ); // Framework description.
 define( 'FRAMEWORK_AUTHOR', $parent_theme_author ); // Framework Author name.
 
-define( 'MIN_PHP_VERSION', '5.6' );    // Min PHP version
-
-// Additional framework specific options.
-
-// $expStyleSheetDir = explode( '/', get_stylesheet_directory() );
-// $theme_name = array_pop( $expStyleSheetDir );
+define( 'MIN_PHP_VERSION', '5.6' );    // Min PHP version.

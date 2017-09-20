@@ -1,6 +1,8 @@
 <?php
 /**
  * Obtain theme relevant data
+ *
+ * @package kiliframework
  */
 
 /**
@@ -88,5 +90,19 @@ final class Theme_Data {
 			}
 		}
 		return $files;
+	}
+
+	/**
+	 * Return WordPress global variables
+	 *
+	 * @return array Array with WordPress globals
+	 */
+	public static function get_wordpress_globals() {
+		global $wp_query, $paged, $post;
+		return array(
+			'wp_query' => $wp_query,
+			'paged' => $paged,
+			'post' => $post,
+		);
 	}
 }

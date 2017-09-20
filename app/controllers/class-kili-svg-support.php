@@ -1,6 +1,8 @@
 <?php
 /**
  * For SVG files support
+ *
+ * @package kiliframework
  */
 
 /**
@@ -72,7 +74,7 @@ class Kili_Svg_Support {
 	 * @return array Modified response
 	 */
 	public function ksource_set_dimensions( $response, $attachment, $meta ) {
-		if ( $response['mime'] === 'image/svg+xml' && empty( $response['sizes'] ) ) {
+		if ( strcasecmp( $response['mime'], 'image/svg+xml' ) === 0 && empty( $response['sizes'] ) ) {
 			$svg_file_path = get_attached_file( $attachment->ID );
 			$dimensions = $this->ksource_get_dimensions( $svg_file_path );
 			$response['sizes'] = array(
@@ -81,7 +83,7 @@ class Kili_Svg_Support {
 					'width' => $dimensions->width,
 					'height' => $dimensions->height,
 					'orientation' => $dimensions->width > $dimensions->height ? 'landscape' : 'portrait',
-				)
+				),
 			);
 		}
 		return $response;
