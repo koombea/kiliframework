@@ -19,7 +19,7 @@ final class Tgm_Load {
       array(
         'name'               => 'TinyMCE Advanced',
         'slug'               => 'tinymce-advanced',
-        'required'           => true,
+        'required'           => false,
       ),
     );
     $config = array(
