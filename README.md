@@ -25,12 +25,7 @@ See the [Kili Wiki](https://github.com/koombea/kiliframework/wiki) for detailed 
 
 ## Contributing
 
-1. Fork the project (<https://github.com/koombea/kiliframework>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Rebase your branch with the develop branch to ensure you have the latest version (`git pull --rebase upstream develop`)
-5. Push your branch (`git push origin feature/fooBar`)
-6. Create a new Pull Request
+See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
