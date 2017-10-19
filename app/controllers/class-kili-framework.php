@@ -102,6 +102,13 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		public $kili_context;
 
 		/**
+		 * Handler for class Kili_Layout
+		 *
+		 * @var object
+		 */
+		public $kili_layout;
+
+		/**
 		 * Class constructor
 		 */
 		public function __construct() {
@@ -112,6 +119,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->dynamic_styles = new Kili_Dynamic_Styles();
 			$this->flexible_content_modal = new Flexible_Content_Modal();
 			$this->kili_context = new Kili_Context();
+			$this->kili_layout = new Kili_Layout();
 			$this->base_blocks_style = '';
 			$this->add_actions();
 			if ( class_exists( 'Timber' ) ) {
@@ -216,7 +224,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		function page_blocks_content( $context ) {
 			$block_position = 0;
 			while ( have_rows( 'kili_block_builder' ) ) : the_row();
-				KILI_Layout::render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
+				$this->kili_layout->render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
 				$block_position++;
 			endwhile;
 		}
@@ -225,11 +233,10 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * Set the custom assets
 		 *
 		 * @param string $base_folder Base folder.
-		 * @return void
+		 * @return string Folder route
 		 */
 		public function custom_asset_args( $base_folder ) {
-			$folder = get_template_directory_uri() . '/dist/styles/' . $base_folder;
-			echo $folder;
+			return get_template_directory_uri() . '/dist/styles/' . $base_folder;
 		}
 
 		/**

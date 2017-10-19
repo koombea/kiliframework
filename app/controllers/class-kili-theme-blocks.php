@@ -39,10 +39,10 @@ class Kili_Theme_Blocks {
 				$location['blocks_pages_dir'],
 				isset( $location['excluded_page_blocks'] ) ? $location['excluded_page_blocks'] : array()
 			);
-			$is_defined_alternative_page_blocks = isset( $location['defined_alternative_page_blocks'] );
+			$use_alternative_blocks = isset( $location['defined_alternative_page_blocks'] );
 
 			$layouts = array();
-			if ( $blocks_file_path || $is_defined_alternative_page_blocks ) {
+			if ( $blocks_file_path || $use_alternative_blocks ) {
 				if ( count( $blocks_file_path ) > 0 ) {
 					$layout = $this->get_block_layout( $blocks_file_path );
 					if ( count( $layout ) ) {
@@ -50,7 +50,7 @@ class Kili_Theme_Blocks {
 					}
 				}
 
-				if ( $is_defined_alternative_page_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
+				if ( $use_alternative_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
 					$layout = $this->get_block_layout( $location['defined_alternative_page_blocks'], true );
 					if ( count( $layout ) ) {
 						$layouts = array_merge( $layouts, $layout );
@@ -152,10 +152,9 @@ class Kili_Theme_Blocks {
 			}
 			if ( isset( $sub_fields['sub_fields'] ) && count( $sub_fields['sub_fields'] ) > 0 ) {
 				foreach ( $sub_fields['sub_fields'] as $sub_key => $value ) {
-					if ( isset( $value['type'] ) && strcasecmp( $value['type'],'flexible_content' ) === 0 ) {
-						if ( isset( $value['layouts'] ) && count( $value['layouts'] ) === 0 ) {
-							$current_layout[0]['sub_fields'][0]['sub_fields'][ $sub_key ]['layouts'] = $this->get_block_layout( $blocks_path, false, str_replace( '_', '-', $current_layout[0]['name'] ) );
-						}
+					if ( isset( $value['type'] ) && strcasecmp( $value['type'],'flexible_content' ) === 0
+					&& isset( $value['layouts'] ) && count( $value['layouts'] ) === 0 ) {
+						$current_layout[0]['sub_fields'][0]['sub_fields'][ $sub_key ]['layouts'] = $this->get_block_layout( $blocks_path, false, str_replace( '_', '-', $current_layout[0]['name'] ) );
 					}
 				}
 			}

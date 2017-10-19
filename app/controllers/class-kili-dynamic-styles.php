@@ -77,18 +77,14 @@ class Kili_Dynamic_Styles {
 				}
 			}
 		}
-		if ( ! file_exists( $this->style_file_name ) ) {
+		$current_style = file_exists( $this->style_file_name ) ? file_get_contents( $this->style_file_name ) : '';
+		if ( strcasecmp( $current_style, '' ) !== 0 && strcasecmp( $current_style, $style ) !== 0 ) {
+			$overwrite = true;
+		}
+		if ( $overwrite ) {
 			if ( ! is_dir( $this->style_dir ) ) {
 				mkdir( $this->style_dir, 0755, true );
 			}
-			$overwrite = true;
-		} else {
-			$current_style = file_get_contents( $this->style_file_name );
-			if ( strcasecmp( $current_style, $style ) !== 0 ) {
-				$overwrite = true;
-			}
-		}
-		if ( $overwrite ) {
 			file_put_contents( $this->style_file_name, $this->clean_style( $style ) );
 		}
 	}
