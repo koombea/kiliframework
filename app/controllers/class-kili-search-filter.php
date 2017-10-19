@@ -30,7 +30,7 @@ class Kili_Search_Filter {
 	 */
 	public function search_filter( $query ) {
 		if ( $query->is_search && ! is_admin() ) {
-			$post_type = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( $_GET['post_type'] ) ) : ( isset( $_POST['post_type'] ) ? sanitize_key( wp_unslash( $_POST['post_type'] ) ) : 'post');
+			$post_type = isset( $_REQUEST['post_type'] ) ? sanitize_key( wp_unslash( $_REQUEST['post_type'] ) ) : 'post';
 			$query->set( 'post_type', array( $post_type ) );
 		}
 		return $query;
@@ -100,7 +100,7 @@ class Kili_Search_Filter {
 	 *
 	 * @return void
 	 */
-	private function add_nice_search_filters() {
+	public function add_nice_search_filters() {
 		add_action( 'template_redirect', array( $this, 'ksource_search_redirect' ) );
 		add_filter( 'wpseo_json_ld_search_url', array( $this, 'ksource_search_rewrite' ) );
 		add_action( 'init', array( $this, 'search_base_slug' ) );
@@ -118,9 +118,11 @@ class Kili_Search_Filter {
 		}
 		if ( is_search() && ! is_admin() ) {
 			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-				if ( strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), "/{$wp_rewrite->search_base}/" ) === false && strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), '&' ) === false ) {
-					wp_safe_redirect( get_search_link() );
-					exit();
+				$request_uri = $_SERVER['REQUEST_URI'];
+				$search_link = get_search_link();
+				preg_match( '/\/' . $wp_rewrite->search_base . '\//', $request_uri, $match );
+				if ( ! isset( $match[0] ) ) {
+					wp_safe_redirect( $search_link );
 				}
 			}
 		}

@@ -18,7 +18,7 @@ class Kili_Layout {
 	 * @param string $blocks_id Block builder id.
 	 * @return void
 	 */
-	public static function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {
+	public function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {
 		$layout_file = '{{layout}}';
 		$find = array( '{{layout}}', '_' );
 		$replace = array( $layout, '-' );
@@ -51,7 +51,7 @@ class Kili_Layout {
 				$notice = '<section class="kili-missing-block"><div class="kili-container kili-soft"><b>' .
 					__( 'Notice', 'kiliframework' ) . ':</b> ' . __( 'No block template found', 'kiliframework' ) . ', ' . __( 'please create file', 'kiliframework' ) .
 					' ' . $new_layout_file . '.twig</div></section>';
-				echo html_entity_decode( esc_html( $notice ) );
+				echo html_entity_decode( $notice );
 			}
 		}
 	}

@@ -9,12 +9,6 @@
  * Class for handle flexible content modal
  */
 class Flexible_Content_Modal {
-	/**
-	 * Unique name of the module
-	 *
-	 * @var string
-	 */
-	static private $id = 'acf-fc-modal';
 
 	/**
 	 * Initialize function
