@@ -1,11 +1,12 @@
 <?php
 /**
- * Array of templates and context for Twig views.
+ * Array of templates and context for author view.
  *
  * @package kiliframework
  */
- 
-include_once( "inc/context-query.php" );
+
+ // Include common actions.
+include_once( 'inc/context-query.php' );
 $author_roles = get_user_by( 'slug', get_query_var( 'author_name' ) )->roles ;
 if ( in_array( 'subscriber', $author_roles, true ) ) {
 	$templates[] = '404.twig';

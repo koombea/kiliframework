@@ -1,6 +1,6 @@
 <?php
 /**
- * Array of templates and context for Twig views.
+ * Array of templates and context for error 404 view.
  *
  * @package kiliframework
  */

@@ -1,11 +1,12 @@
 <?php
 /**
- * Array of templates and context for Twig views.
+ * Array of templates and context for category view.
  *
  * @package kiliframework
  */
 
-include_once( "inc/context-query.php" );
+// Include common actions.
+include_once( 'inc/context-query.php' );
 if ( $term ) {
 	$templates[] = "{$type}-{$term->slug}.twig";
 	$templates[] = "{$type}-{$term->term_id}.twig";

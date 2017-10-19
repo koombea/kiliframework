@@ -1,11 +1,12 @@
 <?php
 /**
- * Array of templates and context for Twig views.
+ * Array of templates and context for taxonomy views.
  *
  * @package kiliframework
  */
- 
-include_once( "inc/context-query.php" );
+
+// Include common actions.
+include_once( 'inc/context-query.php' );
 if ( $term ) {
 	$taxonomy    = $term->taxonomy;
 	$templates[] = "taxonomy-{$taxonomy}-{$term->slug}.twig";

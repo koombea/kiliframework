@@ -172,10 +172,9 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Render theme pages from blocks
 		 *
-		 * @param array $presets Blocks settings.
 		 * @return void
 		 */
-		public function render_pages( $presets = null ) {
+		public function render_pages() {
 			$fields = array();
 			$args = array(
 				'sort_order' => 'asc',
@@ -197,9 +196,10 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			);
 			$pages_query = new WP_Query( $args );
 			$all_pages = $pages_query->get_posts( $args );
-			foreach ( $all_pages as $key => $page ) {
-				$page_fields = get_fields( $page->ID );
-				$page_fields['page_id'] = $page->ID;
+			$all_pages_length = count( $all_pages );
+			for ( $key = 0; $key < $all_pages_length; $key++ ) {
+				$page_fields = get_fields( $all_pages[ $key ]->ID );
+				$page_fields['page_id'] = $all_pages[ $key ]->ID;
 				array_push( $fields, $page_fields );
 			}
 			$this->dynamic_styles->set_base_styles( $this->base_blocks_style );
