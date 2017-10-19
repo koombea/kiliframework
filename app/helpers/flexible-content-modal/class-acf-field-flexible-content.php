@@ -1,6 +1,6 @@
 <?php
 
-if( ! class_exists( 'acf_pro' ) && ! class_exists('acf_field_flexible_content') ) :
+if( ! class_exists( 'acf_pro' ) && ! class_exists('acf_field_flexible_content') && class_exists( 'acf_field' )) :
 
 class acf_field_flexible_content extends acf_field {
 	

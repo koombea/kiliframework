@@ -6,11 +6,6 @@
  */
 
 /**
- * Default constants for the parent and child theme
- */
-require_once( get_template_directory() . '/config/defaults.php' );
-
-/**
  * Load the router class
  */
 require_once( get_template_directory() . '/app/controllers/class-kili-router.php' );
@@ -100,6 +95,13 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		public $kili_router;
 
 		/**
+		 * Handler for class Kili_Context
+		 *
+		 * @var object
+		 */
+		public $kili_context;
+
+		/**
 		 * Class constructor
 		 */
 		public function __construct() {
@@ -109,11 +111,10 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->svg_support = new Kili_Svg_Support();
 			$this->dynamic_styles = new Kili_Dynamic_Styles();
 			$this->flexible_content_modal = new Flexible_Content_Modal();
+			$this->kili_context = new Kili_Context();
 			$this->base_blocks_style = '';
-
 			$this->add_actions();
 			if ( class_exists( 'Timber' ) ) {
-				add_filter( 'timber_context', array( $this, 'add_to_context' ) );
 				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
 			} else {
 				add_action( 'admin_notices', function() {
@@ -134,6 +135,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			add_action( 'page_blocks', array( $this, 'page_blocks_content' ) );
 			add_action( 'after_setup_theme', array( $this, 'load_text_domain' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'include_parent_assets' ) );
+			add_action( 'custom_asset', array( $this, 'custom_asset_args' ), 10, 2 );
 		}
 
 		/**
@@ -170,48 +172,39 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		/**
 		 * Render theme pages from blocks
 		 *
-		 * @param array $presets Blocks settings.
 		 * @return void
 		 */
-		public function render_pages( $presets ) {
-			$context = Timber::get_context();
-			$settings = $this->kili_router->get_current_view_settings( $presets );
-			if ( $settings ) {
-				$template = $settings['template'];
-				$fields = array();
-				$args = array(
-					'sort_order' => 'asc',
-					'sort_column' => 'ID',
-					'hierarchical' => 1,
-					'exclude' => '',
-					'include' => '',
-					'meta_key' => 'kili_block_builder',
-					'meta_value' => '',
-					'authors' => '',
-					'child_of' => 0,
-					'parent' => -1,
-					'exclude_tree' => '',
-					'number' => '',
-					'offset' => 0,
-					'post_type' => get_post_types(),
-					'post_status' => 'publish',
-					'numberposts' => -1,
-				);
-
-				foreach ( $settings as $key => $value ) {
-					$context[ $key ] = $value;
-				}
-				$pages_query = new WP_Query( $args );
-				$all_pages = $pages_query->get_posts( $args );
-				foreach ( $all_pages as $key => $page ) {
-					$page_fields = get_fields( $page->ID );
-					$page_fields['page_id'] = $page->ID;
-					array_push( $fields, $page_fields );
-				}
-				$this->dynamic_styles->set_base_styles( $this->base_blocks_style );
-				$this->dynamic_styles->process_blocks_styles( $fields );
-				Timber::render( $template . '.twig', $context );
+		public function render_pages() {
+			$fields = array();
+			$args = array(
+				'sort_order' => 'asc',
+				'sort_column' => 'ID',
+				'hierarchical' => 1,
+				'exclude' => '',
+				'include' => '',
+				'meta_key' => 'kili_block_builder',
+				'meta_value' => '',
+				'authors' => '',
+				'child_of' => 0,
+				'parent' => -1,
+				'exclude_tree' => '',
+				'number' => '',
+				'offset' => 0,
+				'post_type' => get_post_types(),
+				'post_status' => 'publish',
+				'numberposts' => -1,
+			);
+			$pages_query = new WP_Query( $args );
+			$all_pages = $pages_query->get_posts( $args );
+			$all_pages_length = count( $all_pages );
+			for ( $key = 0; $key < $all_pages_length; $key++ ) {
+				$page_fields = get_fields( $all_pages[ $key ]->ID );
+				$page_fields['page_id'] = $all_pages[ $key ]->ID;
+				array_push( $fields, $page_fields );
 			}
+			$this->dynamic_styles->set_base_styles( $this->base_blocks_style );
+			$this->dynamic_styles->process_blocks_styles( $fields );
+			$this->kili_router->set_current_view();
 		}
 
 		/**
@@ -226,35 +219,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				KILI_Layout::render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
 				$block_position++;
 			endwhile;
-		}
-
-		/**
-		 * Add data to timber context
-		 *
-		 * @param array $context Timber pages context.
-		 * @return array Context variable updated
-		 */
-		public function add_to_context( $context ) {
-			// Add extra data.
-			$context['options'] = function_exists( 'get_fields' ) ? get_fields( 'option' ) : '';
-			// Menu.
-			$context['menu']['primary'] = new TimberMenu( 'primary_navigation' );
-			// Site info.
-			$context['site'] = $context['site'];
-			// Assets path.
-			$context['dist']['images'] = $context['theme']->link . '/dist/images/';
-			$context['dist']['css'] = $context['theme']->link . '/dist/styles/';
-			$context['dist']['js'] = $context['theme']->link . '/dist/scripts/';
-			$context['sidebar_primary'] = Timber::get_widgets( 'sidebar-1' );
-
-			add_action( 'custom_asset', array( $this, 'custom_asset_args' ), 10, 2 );
-			if ( function_exists( 'icl_get_languages' ) ) {
-				$languages = icl_get_languages( 'skip_missing=0&orderby=code' );
-				if ( ! empty( $languages ) ) {
-					$context['languages'] = $languages;
-				}
-			}
-			return $context;
 		}
 
 		/**
