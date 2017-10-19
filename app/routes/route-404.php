@@ -1,2 +1,8 @@
 <?php
-$templates[] = '404.twig';
+/**
+ * Array of templates and context for Twig views.
+ *
+ * @package kiliframework
+ */
+
+$templates[] = "{$type}.twig";

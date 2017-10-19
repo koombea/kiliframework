@@ -5,8 +5,12 @@
  * @param array $context Timber pages context.
  * @return array Context variable updated
  */
-
 class Kili_Context {
+	/**
+	 * Set the default Timber context for Twig views.
+	 *
+	 * @return array Context variable updated
+	 */
 	public function set_context( $context = null ) {
 		$context = $context ? array_merge( Timber::get_context(), $context ) : Timber::get_context();
 		// Add extra data.
@@ -14,7 +18,7 @@ class Kili_Context {
 		// Menu.
 		$context['menu']['primary'] = new TimberMenu( 'primary_navigation' );
 		// Sidebar.
-		$context['sidebar_primary'] = Timber::get_widgets('sidebar-1');
+		$context['sidebar_primary'] = Timber::get_widgets( 'sidebar-1' );
 		// Site info.
 		$context['site'] = new TimberSite();
 		$context['admin_url'] = site_url();
@@ -37,10 +41,10 @@ class Kili_Context {
 	 * Get the blog page URL set in WordPress Options
 	 * And provide a fallback to the posts archive page.
 	 *
-	 * @return void
+	 * @return string the blog page URL
 	 */
 	public function slug_all_posts_link() {
-		if ( 'page' == get_option( 'show_on_front' ) ) {
+		if ( 'page' === get_option( 'show_on_front' ) ) {
 			if ( get_option( 'page_for_posts' ) ) {
 				return esc_url( get_permalink( get_option( 'page_for_posts' ) ) );
 			} else {

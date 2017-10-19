@@ -96,6 +96,7 @@ class Kili_Router {
 				default:
 					$templates = array( "{$type}.twig" );
 			}
+
 			$template = $this->locate_template( $templates );
 			if ( empty( $template ) ) {
 				$template = $fallback;
@@ -154,39 +155,41 @@ class Kili_Router {
 		$is_user_login = is_user_logged_in();
 		$is_preview = get_query_var( 'preview' );
 		$this->context['post'] = new TimberPost();
-		if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
-			$view = '404.twig';
-			if ( $is_preview && $is_user_login ) {
-				$view = "{$type}.twig";
-			} elseif ( $object ) {
-				$view = "{$type}-{$object->post_type}.twig";
-			}
-		} elseif ( post_password_required( $object->ID ) ) {
-			$view = "{$type}-password.twig";
-			if ( $is_preview && $is_user_login ) {
-				$view = "{$type}.twig";
-				if ( $object ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				}
-			}
-		} elseif ( strcasecmp( $object->post_status, 'pending' ) === 0 ) {
-			$current_user = wp_get_current_user();
-			$view = '404.twig';
-			if ( $current_user->ID == $object->post_author ) {
+		if ( $object ) {
+			if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
+				$view = '404.twig';
 				if ( $is_preview && $is_user_login ) {
 					$view = "{$type}.twig";
 				} elseif ( $object ) {
 					$view = "{$type}-{$object->post_type}.twig";
 				}
+			} elseif ( post_password_required( $object->ID ) ) {
+				$view = "{$type}-password.twig";
+				if ( $is_preview && $is_user_login ) {
+					$view = "{$type}.twig";
+					if ( $object ) {
+						$view = "{$type}-{$object->post_type}.twig";
+					}
+				}
+			} elseif ( strcasecmp( $object->post_status, 'pending' ) === 0 ) {
+				$current_user = wp_get_current_user();
+				$view = '404.twig';
+				if ( $current_user->ID == $object->post_author ) {
+					if ( $is_preview && $is_user_login ) {
+						$view = "{$type}.twig";
+					} elseif ( $object ) {
+						$view = "{$type}-{$object->post_type}.twig";
+					}
+				}
+			} elseif ( ! $pagename && $page_id ) {
+				$pagename = $object->post_name;
+			} elseif ( $pagename ) {
+				$view = "{$type}-{$pagename}.twig";
+			} elseif ( $page_id ) {
+				$view = "{$type}-{$page_id}.twig";
+			} elseif ( $object ) {
+				$view = "{$type}-{$object->post_type}.twig";
 			}
-		} elseif ( ! $pagename && $page_id ) {
-			$pagename = $object->post_name;
-		} elseif ( $pagename ) {
-			$view = "{$type}-{$pagename}.twig";
-		} elseif ( $page_id ) {
-			$view = "{$type}-{$page_id}.twig";
-		} elseif ( $object ) {
-			$view = "{$type}-{$object->post_type}.twig";
 		}
 		return $view;
 	}
