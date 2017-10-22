@@ -68,6 +68,8 @@ class Kili_Router {
 			$templates = array();
 			switch ( $type ) {
 				case '404':
+				case 'search':
+				case 'attachment':
 				case 'taxonomy':
 				case 'frontpage':
 				case 'home':
@@ -83,7 +85,6 @@ class Kili_Router {
 				default:
 					$templates = array( "{$type}.twig" );
 			}
-
 			$template = $this->locate_template( $templates );
 			if ( empty( $template ) ) {
 				$template = $fallback;
