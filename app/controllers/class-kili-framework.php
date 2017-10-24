@@ -31,11 +31,6 @@ require_once( 'class-kili-theme-blocks.php' );
 require_once( 'class-kili-search-filter.php' );
 
 /**
- * SVG support
- */
-require_once( 'class-kili-svg-support.php' );
-
-/**
  * Dynamic styles
  */
 require_once( 'class-kili-dynamic-styles.php' );
@@ -65,13 +60,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * @var object
 		 */
 		protected $search_filters;
-
-		/**
-		 * Handler for class Kili_Svg_Support
-		 *
-		 * @var object
-		 */
-		protected $svg_support;
 
 		/**
 		 * Handler for class Kili_Dynamic_Styles
@@ -115,7 +103,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->kili_router = new Kili_Router();
 			$this->default_kili_blocks = new Kili_Theme_Blocks();
 			$this->search_filters = new Kili_Search_Filter();
-			$this->svg_support = new Kili_Svg_Support();
 			$this->dynamic_styles = new Kili_Dynamic_Styles();
 			$this->flexible_content_modal = new Flexible_Content_Modal();
 			$this->kili_context = new Kili_Context();
