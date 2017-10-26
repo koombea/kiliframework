@@ -29,6 +29,11 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.0.3
+  * Template type names to be used for dynamic hooks
+  * Augment native template hierarchy with non-PHP template processing.
+  * Optimize theme hierarchy routes for twig views
+  * Child theme support
 * 0.0.2
   * ACF and Timber integration into the parent theme. It now works without the need of a child theme.
   * Route updates.
