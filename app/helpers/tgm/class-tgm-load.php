@@ -11,21 +11,31 @@ final class Tgm_Load {
 
   public function kili_register_required_plugins() {
     $plugins = array(
-      array(
-        'name'      => 'Timber Library',
-        'slug'      => 'timber-library',
-        'required'  => true,
-      ),
-      array(
-        'name'               => 'SVG Support',
-        'slug'               => 'svg-support',
-        'required'           => false,
-      ),
-      array(
-        'name'               => 'TinyMCE Advanced',
-        'slug'               => 'tinymce-advanced',
-        'required'           => false,
-      ),
+		array(
+			'name'      => 'Timber Library',
+			'slug'      => 'timber-library',
+			'required'  => true,
+		),
+		array(
+			'name'               => 'SVG Support',
+			'slug'               => 'svg-support',
+			'required'           => false,
+		),
+		array(
+			'name'               => 'TinyMCE Advanced',
+			'slug'               => 'tinymce-advanced',
+			'required'           => false,
+		),
+		array(
+			'name'                  => 'Kili. Automatic Updater',
+			'slug'                  => 'kili-automatic-updater',
+			'source'                => 'https://github.com/fabolivark/kili-automatic-updater/archive/master.zip',
+			'required'              => false,
+			'version'               => '0.0.1',
+			'force_activation'      => false,
+			'force_deactivation'    => false,
+			'external_url'          => 'https://github.com/fabolivark/kili-automatic-updater',
+		),
     );
     $config = array(
       'id'           => 'kili_tgmpa',
