@@ -29,6 +29,8 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.0.4
+  * HotFix: support for page template
 * 0.0.3
   * Template type names to be used for dynamic hooks
   * Augment native template hierarchy with non-PHP template processing.
