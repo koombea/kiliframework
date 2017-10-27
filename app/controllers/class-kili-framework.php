@@ -208,7 +208,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * @param array $context Timber pages context.
 		 * @return void
 		 */
-		function page_blocks_content( $context ) {
+		public function page_blocks_content( $context ) {
 			$block_position = 0;
 			while ( have_rows( 'kili_block_builder' ) ) : the_row();
 				$this->kili_layout->render( get_row_layout(), $block_position, $context, 'kili_block_builder' );

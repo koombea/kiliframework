@@ -144,6 +144,9 @@ class Kili_Router {
 		$is_user_login = is_user_logged_in();
 		$is_preview = get_query_var( 'preview' );
 		$this->context['post'] = new TimberPost();
+		if ( is_page_template('page-templates/layout-builder.php') ) {
+			$this->context['is_kili'] = true;
+		}
 		if ( $object ) {
 			if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
 				$view = '404.twig';
