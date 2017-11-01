@@ -58,7 +58,7 @@ class Kili_Search_Filter {
 	public function cf_search_join( $join ) {
 		global $wpdb;
 		if ( is_search() ) {
-			$join .= ' LEFT JOIN ' . $wpdb->postmeta . ' ON ' . $wpdb->posts . '.ID = ' . $wpdb->postmeta . '.post_id ';
+			$join .= ' LEFT JOIN ' . $wpdb->postmeta . ' cfpm ON ' . $wpdb->posts . '.ID = cfpm.post_id ';
 		}
 		return $join;
 	}
@@ -75,7 +75,7 @@ class Kili_Search_Filter {
 		if ( is_search() ) {
 			$where = preg_replace(
 				'/\(\s*' . $wpdb->posts . ".post_title\s+LIKE\s*(\'[^\']+\')\s*\)/",
-				'(' . $wpdb->posts . '.post_title LIKE $1) OR (' . $wpdb->postmeta . '.meta_value LIKE $1)', $where
+				'(' . $wpdb->posts . '.post_title LIKE $1) OR (cfpm.meta_value LIKE $1)', $where
 			);
 		}
 		return $where;
