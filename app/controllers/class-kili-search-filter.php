@@ -13,12 +13,12 @@ class Kili_Search_Filter {
 	 * Class constructor
 	 */
 	public function __construct() {
-		add_filter( 'pre_get_posts', array( $this, 'search_filter' ) );
+		add_filter( 'pre_get_posts', array( $this, 'kili_filter_search' ) );
 		if ( current_theme_supports( 'kili-enable-acf-search' ) ) {
-			$this->add_cf_search_filters();
+			$this->kili_add_cf_search_filters();
 		}
 		if ( current_theme_supports( 'kili-nice-search' ) ) {
-			$this->add_nice_search_filters();
+			$this->kili_add_nice_search_filters();
 		}
 	}
 
@@ -28,7 +28,7 @@ class Kili_Search_Filter {
 	 * @param object $query The search query object.
 	 * @return object Search query object with the post type filter
 	 */
-	public function search_filter( $query ) {
+	public function kili_filter_search( $query ) {
 		if ( $query->is_search && ! is_admin() ) {
 			$post_type = isset( $_REQUEST['post_type'] ) ? sanitize_key( wp_unslash( $_REQUEST['post_type'] ) ) : 'post';
 			$query->set( 'post_type', array( $post_type ) );
@@ -42,10 +42,10 @@ class Kili_Search_Filter {
 	 * @author adambalee (http://adambalee.com)
 	 * @return void
 	 */
-	private function add_cf_search_filters() {
-		add_filter( 'posts_join', array( $this, 'cf_search_join' ) );
-		add_filter( 'posts_where', array( $this, 'cf_search_where' ) );
-		add_filter( 'posts_distinct', array( $this, 'cf_search_distinct' ) );
+	private function kili_add_cf_search_filters() {
+		add_filter( 'posts_join', array( $this, 'kili_cf_search_join' ) );
+		add_filter( 'posts_where', array( $this, 'kili_cf_search_where' ) );
+		add_filter( 'posts_distinct', array( $this, 'kili_cf_search_distinct' ) );
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Kili_Search_Filter {
 	 * @param object $join The search query string.
 	 * @return string Modified search query string
 	 */
-	public function cf_search_join( $join ) {
+	public function kili_cf_search_join( $join ) {
 		global $wpdb;
 		if ( is_search() ) {
 			$join .= ' LEFT JOIN ' . $wpdb->postmeta . ' cfpm ON ' . $wpdb->posts . '.ID = cfpm.post_id ';
@@ -70,7 +70,7 @@ class Kili_Search_Filter {
 	 * @param object $where The search query string.
 	 * @return string Modified search query string
 	 */
-	public function cf_search_where( $where ) {
+	public function kili_cf_search_where( $where ) {
 		global $wpdb;
 		if ( is_search() ) {
 			$where = preg_replace(
@@ -88,7 +88,7 @@ class Kili_Search_Filter {
 	 * @param object $where The search query string.
 	 * @return string Modified search query string
 	 */
-	public function cf_search_distinct( $where ) {
+	public function kili_cf_search_distinct( $where ) {
 		if ( is_search() ) {
 			return 'DISTINCT';
 		}
@@ -100,10 +100,10 @@ class Kili_Search_Filter {
 	 *
 	 * @return void
 	 */
-	public function add_nice_search_filters() {
-		add_action( 'template_redirect', array( $this, 'ksource_search_redirect' ) );
-		add_filter( 'wpseo_json_ld_search_url', array( $this, 'ksource_search_rewrite' ) );
-		add_action( 'init', array( $this, 'search_base_slug' ) );
+	public function kili_add_nice_search_filters() {
+		add_action( 'template_redirect', array( $this, 'kili_search_redirect' ) );
+		add_filter( 'wpseo_json_ld_search_url', array( $this, 'kili_search_rewrite' ) );
+		add_action( 'init', array( $this, 'kili_search_base_slug' ) );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class Kili_Search_Filter {
 	 *
 	 * @return void
 	 */
-	public function ksource_search_redirect() {
+	public function kili_search_redirect() {
 		global $wp_rewrite;
 		if ( ! isset( $wp_rewrite ) || ! is_object( $wp_rewrite ) || ! $wp_rewrite->get_search_permastruct() ) {
 			return;
@@ -134,7 +134,7 @@ class Kili_Search_Filter {
 	 * @param string $url The URL string.
 	 * @return string The new URL string
 	 */
-	public function ksource_search_rewrite( $url ) {
+	public function kili_search_rewrite( $url ) {
 		return str_replace( '/?s=', '/' . __( 'search' ) . '/', $url );
 	}
 
@@ -143,7 +143,7 @@ class Kili_Search_Filter {
 	 *
 	 * @return void
 	 */
-	public function search_base_slug() {
+	public function kili_search_base_slug() {
 		$search_slug = __( 'search' ); // change slug name.
 		$GLOBALS['wp_rewrite']->search_base = $search_slug;
 		$GLOBALS['wp_rewrite']->flush_rules();
