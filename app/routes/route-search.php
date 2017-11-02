@@ -7,7 +7,7 @@
 
 // Include common actions.
 include_once( 'inc/context-query.php' );
-//Search Context.
+// Search Context.
 $this->context['current_search'] = get_search_query();
 $post_types = array_filter( (array) get_query_var( 'post_type' ) );
 if ( count( $post_types ) === 1 ) {

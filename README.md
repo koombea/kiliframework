@@ -29,6 +29,10 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.1.0
+  * Code improvements
+  * Add theme updating functionality: now the theme will notify if there is a new version. Requires the plugin [Kili. Automatic updater](https://github.com/fabolivark/kili-automatic-updater)
+  * Bugfix: correct the bad query generation when searching a custom post type with ACF fields
 * 0.0.4
   * HotFix: support for page template
 * 0.0.3
