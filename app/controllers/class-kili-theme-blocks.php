@@ -99,15 +99,16 @@ class Kili_Theme_Blocks {
 
 				$location_index = 0;
 				foreach ( $this->supported_formats as $format ) {
-					if ( empty( $location[ $format ] ) || ! isset( $location[ $format ] ) ) continue;
-					$meta['location'][ $location_index ] = array();
-					foreach ( $location[ $format ] as $place ) {
-						$meta['location'][ $location_index ][] = array(
-							'param'   => $format,
-							'operator'   => '==',
-							'value'   => $place,
-						);
-						$location_index++;
+					if ( isset( $location[ $format ] ) ) {
+						$meta['location'][ $location_index ] = array();
+						foreach ( $location[ $format ] as $place ) {
+							$meta['location'][ $location_index ][] = array(
+								'param'   => $format,
+								'operator'   => '==',
+								'value'   => $place,
+							);
+							$location_index++;
+						}
 					}
 				}
 			}
@@ -165,9 +166,9 @@ class Kili_Theme_Blocks {
 	/**
 	 * Get blocks layout
 	 *
-	 * @param array $blocks_path Block files path.
+	 * @param array   $blocks_path Block files path.
 	 * @param boolean $add_default_blocks Use default blocks (default:false).
-	 * @param string $excluded_file_name Exclude file name.
+	 * @param string  $excluded_file_name Exclude file name.
 	 * @return array Array with blocks layout
 	 */
 	private function get_block_layout( $blocks_path, $add_default_blocks = false, $excluded_file_name = '' ) {
@@ -195,7 +196,7 @@ class Kili_Theme_Blocks {
 	 * Get block structure from json files
 	 *
 	 * @param string $directory Blocks directory.
-	 * @param array $excluded Excluded blocks.
+	 * @param array  $excluded Excluded blocks.
 	 * @return array Array with blocks structure
 	 */
 	private function get_acf_json_files( $directory, $excluded = array() ) {

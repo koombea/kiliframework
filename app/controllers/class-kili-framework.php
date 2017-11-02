@@ -73,7 +73,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 *
 		 * @var object
 		 */
-		protected $flexible_content_modal;
+		protected $flexible_modal;
 
 		/**
 		 * Handler for class Kili_Router
@@ -104,7 +104,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->default_kili_blocks = new Kili_Theme_Blocks();
 			$this->search_filters = new Kili_Search_Filter();
 			$this->dynamic_styles = new Kili_Dynamic_Styles();
-			$this->flexible_content_modal = new Flexible_Content_Modal();
+			$this->flexible_modal = new Flexible_Content_Modal();
 			$this->kili_context = new Kili_Context();
 			$this->kili_layout = new Kili_Layout();
 			$this->base_blocks_style = '';
@@ -117,7 +117,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				} );
 			}
 			$this->init_default_block_builder();
-			$this->flexible_content_modal->init();
+			$this->flexible_modal->init();
 		}
 
 		/**

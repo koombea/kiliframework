@@ -12,10 +12,10 @@ class Kili_Layout {
 	/**
 	 * Render a block
 	 *
-	 * @param string $layout Block layout.
+	 * @param string  $layout Block layout.
 	 * @param integer $block_position Block position.
-	 * @param array $context Page context (timber).
-	 * @param string $blocks_id Block builder id.
+	 * @param array   $context Page context (timber).
+	 * @param string  $blocks_id Block builder id.
 	 * @return void
 	 */
 	public function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {

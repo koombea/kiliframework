@@ -67,7 +67,6 @@ class Kili_Dynamic_Styles {
 	 */
 	public function process_blocks_styles( $fields ) {
 		$style = '';
-		$overwrite = false;
 		$size = count( $fields );
 		for ( $i = 0; $i < $size; $i++ ) {
 			$field = $fields[ $i ];
@@ -79,9 +78,6 @@ class Kili_Dynamic_Styles {
 		}
 		$current_style = file_exists( $this->style_file_name ) ? file_get_contents( $this->style_file_name ) : '';
 		if ( strcasecmp( $current_style, '' ) !== 0 && strcasecmp( $current_style, $style ) !== 0 ) {
-			$overwrite = true;
-		}
-		if ( $overwrite ) {
 			if ( ! is_dir( $this->style_dir ) ) {
 				mkdir( $this->style_dir, 0755, true );
 			}
@@ -122,10 +118,10 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Replace block placeholders with the real styles
 	 *
-	 * @param array $field Block field.
-	 * @param mixed $page_id Page id.
+	 * @param array  $field Block field.
+	 * @param mixed  $page_id Page id.
 	 * @param string $layout Block layout.
-	 * @param mixed $block_position Block position.
+	 * @param mixed  $block_position Block position.
 	 * @return string CSS string for the block field
 	 */
 	private function replace_placeholders( $field, $page_id, $layout, $block_position ) {
@@ -149,7 +145,7 @@ class Kili_Dynamic_Styles {
 	/**
 	 * Get the replacement for provided field placeholder
 	 *
-	 * @param array $array Placeholders array.
+	 * @param array  $array Placeholders array.
 	 * @param string $prefix Prefix for replacement (default:'').
 	 * @return array Array with replacements done
 	 */

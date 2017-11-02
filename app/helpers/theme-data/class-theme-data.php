@@ -74,7 +74,7 @@ final class Theme_Data {
 	 * Scans directory for files
 	 *
 	 * @param string $dir Directory route.
-	 * @param array $excl Excluded file names.
+	 * @param array  $excl Excluded file names.
 	 * @return array Files array
 	 */
 	public static function kili_scandir( $dir, $excl = array() ) {
