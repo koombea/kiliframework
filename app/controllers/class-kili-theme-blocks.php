@@ -31,6 +31,10 @@ class Kili_Theme_Blocks {
 	 */
 	public function add_blocks_to_wp( $location ) {
 		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
 		if ( function_exists( 'acf_add_local_field_group' ) && $location ) {
 			if ( ! is_dir( $location['blocks_pages_dir'] ) ) {
 				$wp_filesystem->mkdir( $location['blocks_pages_dir'] );
@@ -128,6 +132,10 @@ class Kili_Theme_Blocks {
 	 */
 	private function get_file_layout( $blocks_path, $file ) {
 		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
 		$current_layout = null;
 		$sub_fields = null;
 		$get_json_content = $wp_filesystem->get_contents( $file );

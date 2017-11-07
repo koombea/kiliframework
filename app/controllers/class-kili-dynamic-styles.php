@@ -67,6 +67,10 @@ class Kili_Dynamic_Styles {
 	 */
 	public function process_blocks_styles( $fields ) {
 		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
 		$style = '';
 		$size = count( $fields );
 		for ( $i = 0; $i < $size; $i++ ) {

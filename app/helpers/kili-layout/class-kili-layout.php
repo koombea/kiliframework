@@ -20,6 +20,10 @@ class Kili_Layout {
 	 */
 	public function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {
 		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
 		$layout_file = '{{layout}}';
 		$find = array( '{{layout}}', '_' );
 		$replace = array( $layout, '-' );
