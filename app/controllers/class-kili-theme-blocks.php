@@ -30,9 +30,10 @@ class Kili_Theme_Blocks {
 	 * @return void
 	 */
 	public function add_blocks_to_wp( $location ) {
+		global $wp_filesystem;
 		if ( function_exists( 'acf_add_local_field_group' ) && $location ) {
 			if ( ! is_dir( $location['blocks_pages_dir'] ) ) {
-				mkdir( $location['blocks_pages_dir'], 0755, true );
+				$wp_filesystem->mkdir( $location['blocks_pages_dir'] );
 			}
 
 			$blocks_file_path = $this->get_acf_json_files(
@@ -126,32 +127,35 @@ class Kili_Theme_Blocks {
 	 * @return array Array with block layout
 	 */
 	private function get_file_layout( $blocks_path, $file ) {
-		$get_json_content = file_get_contents( $file );
+		global $wp_filesystem;
+		$current_layout = null;
+		$sub_fields = null;
+		$get_json_content = $wp_filesystem->get_contents( $file );
 		$json_to_php = json_decode( $get_json_content, true );
-		$current_layout = array(
-			array(
-				'key' => $json_to_php[0]['key'],
-				'name' => str_replace( ' ', '_', strtolower( $json_to_php[0]['title'] ) ),
-				'label' => $json_to_php[0]['title'],
-				'display' => 'block',
-				'sub_fields' => $json_to_php[0]['fields'],
-				'min' => '',
-				'max' => '',
-			),
-		);
-		if ( null !== $json_to_php ) {
+
+		if ( null !== $json_to_php && isset( $json_to_php[0] ) ) {
+			$current_layout = array(
+				array(
+					'key' => $json_to_php[0]['key'],
+					'name' => str_replace( ' ', '_', strtolower( $json_to_php[0]['title'] ) ),
+					'label' => $json_to_php[0]['title'],
+					'display' => 'block',
+					'sub_fields' => $json_to_php[0]['fields'],
+					'min' => '',
+					'max' => '',
+				),
+			);
 			if ( isset( $json_to_php[0]['fields'][0]['layouts'] ) ) {
 				$current_layout = $json_to_php[0]['fields'][0]['layouts'];
 			} elseif ( isset( $json_to_php[0]['fields'][0]['layout'] ) ) {
 				$current_layout = $json_to_php[0]['fields'][0]['layout'];
 			}
-			$sub_fields = null;
 			if ( isset( $current_layout[0]['sub_fields'] ) ) {
 				$sub_fields = $current_layout[0]['sub_fields'][0];
 			} elseif ( isset( $current_layout[0][0] ) ) {
 				$sub_fields = $current_layout[0][0]['sub_fields'][0];
 			}
-			if ( isset( $sub_fields['sub_fields'] ) && count( $sub_fields['sub_fields'] ) > 0 ) {
+			if ( null !== $sub_fields && isset( $sub_fields['sub_fields'] ) && count( $sub_fields['sub_fields'] ) > 0 ) {
 				foreach ( $sub_fields['sub_fields'] as $sub_key => $value ) {
 					if ( isset( $value['type'] ) && strcasecmp( $value['type'],'flexible_content' ) === 0
 					&& isset( $value['layouts'] ) && count( $value['layouts'] ) === 0 ) {
