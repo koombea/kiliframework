@@ -66,6 +66,7 @@ class Kili_Dynamic_Styles {
 	 * @return void
 	 */
 	public function process_blocks_styles( $fields ) {
+		global $wp_filesystem;
 		$style = '';
 		$size = count( $fields );
 		for ( $i = 0; $i < $size; $i++ ) {
@@ -76,12 +77,12 @@ class Kili_Dynamic_Styles {
 				}
 			}
 		}
-		$current_style = file_exists( $this->style_file_name ) ? file_get_contents( $this->style_file_name ) : '';
+		$current_style = file_exists( $this->style_file_name ) ? $wp_filesystem->get_contents( $this->style_file_name ) : '';
 		if ( strcasecmp( $current_style, '' ) !== 0 && strcasecmp( $current_style, $style ) !== 0 ) {
 			if ( ! is_dir( $this->style_dir ) ) {
-				mkdir( $this->style_dir, 0755, true );
+				$wp_filesystem->mkdir( $this->style_dir );
 			}
-			file_put_contents( $this->style_file_name, $this->clean_style( $style ) );
+			$wp_filesystem->put_contents( $this->style_file_name, $this->clean_style( $style ), FS_CHMOD_FILE );
 		}
 	}
 

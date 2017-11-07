@@ -19,6 +19,7 @@ class Kili_Layout {
 	 * @return void
 	 */
 	public function render( $layout, $block_position, $context = array(), $blocks_id = 0 ) {
+		global $wp_filesystem;
 		$layout_file = '{{layout}}';
 		$find = array( '{{layout}}', '_' );
 		$replace = array( $layout, '-' );
@@ -26,7 +27,7 @@ class Kili_Layout {
 		$full_layout_directory = get_stylesheet_directory() . $layout_directory;
 
 		if ( ! is_dir( get_stylesheet_directory() . $layout_directory ) ) {
-			mkdir( get_stylesheet_directory() . $layout_directory, 0755, true );
+			$wp_filesystem->mkdir( get_stylesheet_directory() . $layout_directory );
 		}
 
 		$new_layout_file = str_replace( $find, $replace, $layout_file );
