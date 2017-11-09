@@ -84,7 +84,7 @@ class Kili_Dynamic_Styles {
 		$current_style = file_exists( $this->style_file_name ) ? $wp_filesystem->get_contents( $this->style_file_name ) : '';
 		if ( strcasecmp( $current_style, '' ) !== 0 && strcasecmp( $current_style, $style ) !== 0 ) {
 			if ( ! is_dir( $this->style_dir ) ) {
-				$wp_filesystem->mkdir( $this->style_dir );
+				wp_mkdir_p( $this->style_dir, FS_CHMOD_DIR );
 			}
 			$wp_filesystem->put_contents( $this->style_file_name, $this->clean_style( $style ), FS_CHMOD_FILE );
 		}
