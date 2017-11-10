@@ -60,10 +60,10 @@ class Kili_Layout {
 	 */
 	private function get_file_name( $layout_directory, $layout_file, $default_directory ) {
 		$file_name = '';
-		if ( file_exists( get_stylesheet_directory() . $layout_directory . $layout_file . 'twig' ) ) {
-			$file_name = get_stylesheet_directory() . $layout_directory . $layout_file . 'twig';
-		} elseif ( file_exists( $default_directory . $layout_file . 'twig' ) ) {
-			$file_name = $default_directory . $layout_file . 'twig';
+		if ( file_exists( get_stylesheet_directory() . $layout_directory . $layout_file . '.twig' ) ) {
+			$file_name = get_stylesheet_directory() . $layout_directory . $layout_file . '.twig';
+		} elseif ( file_exists( $default_directory . $layout_file . '.twig' ) ) {
+			$file_name = $default_directory . $layout_file . '.twig';
 		} elseif ( file_exists( get_template_directory() . $layout_directory . $layout_file . '.twig' ) ) {
 			$file_name = get_template_directory() . $layout_directory . $layout_file . '.twig';
 		}
