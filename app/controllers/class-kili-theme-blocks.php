@@ -30,10 +30,9 @@ class Kili_Theme_Blocks {
 	 * @return void
 	 */
 	public function add_blocks_to_wp( $location ) {
-		global $wp_filesystem;
 		if ( function_exists( 'acf_add_local_field_group' ) && $location ) {
 			if ( ! is_dir( $location['blocks_pages_dir'] ) ) {
-				$wp_filesystem->mkdir( $location['blocks_pages_dir'] );
+				wp_mkdir_p( $location['blocks_pages_dir'], 0755 );
 			}
 
 			$blocks_file_path = $this->get_acf_json_files(
@@ -57,65 +56,62 @@ class Kili_Theme_Blocks {
 						$layouts = array_merge( $layouts, $layout );
 					}
 				}
-
-				$meta = array(
-					'key' => $location['flexible_content_group'],
-					'title' => $location['layout_title'],
-					'fields' => array(
-						array(
-							'key' => $location['flexible_content_key'],
-							'label' => '',
-							'name' => $location['flexible_content_id'],
-							'type' => 'flexible_content',
-							'instructions' => __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' ),
-							'required' => 0,
-							'conditional_logic' => 0,
-							'wrapper' => array(
-								'width' => '',
-								'class' => 'kiliframework',
-								'id' => '',
-							),
-							'button_label' => __( 'Add Section','kiliframework' ),
-							'min' => '',
-							'max' => '',
-							'layouts' => $layouts,
+			}
+			$meta = array(
+				'key' => $location['flexible_content_group'],
+				'title' => $location['layout_title'],
+				'fields' => array(
+					array(
+						'key' => $location['flexible_content_key'],
+						'label' => '',
+						'name' => $location['flexible_content_id'],
+						'type' => 'flexible_content',
+						'instructions' => __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' ),
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => 'kiliframework',
+							'id' => '',
 						),
+						'button_label' => __( 'Add Section','kiliframework' ),
+						'min' => '',
+						'max' => '',
+						'layouts' => $layouts,
 					),
-					'menu_order' => 0,
-					'position' => 'normal',
-					'style' => 'default',
-					'label_placement' => 'top',
-					'instruction_placement' => 'label',
-					'hide_on_screen' => array(
-						0 => 'the_content',
-						1 => 'excerpt',
-						2 => 'custom_fields',
-						5 => 'categories',
-						6 => 'tags',
-					),
-					'location' => array(),
-					'active' => 1,
-					'description' => __( 'Kili Framework page builder', 'kiliframework' ),
-				);
+				),
+				'menu_order' => 0,
+				'position' => 'normal',
+				'style' => 'default',
+				'label_placement' => 'top',
+				'instruction_placement' => 'label',
+				'hide_on_screen' => array(
+					0 => 'the_content',
+					1 => 'excerpt',
+					2 => 'custom_fields',
+					5 => 'categories',
+					6 => 'tags',
+				),
+				'location' => array(),
+				'active' => 1,
+				'description' => __( 'Kili Framework page builder', 'kiliframework' ),
+			);
 
-				$location_index = 0;
-				foreach ( $this->supported_formats as $format ) {
-					if ( isset( $location[ $format ] ) ) {
-						$meta['location'][ $location_index ] = array();
-						foreach ( $location[ $format ] as $place ) {
-							$meta['location'][ $location_index ][] = array(
-								'param'   => $format,
-								'operator'   => '==',
-								'value'   => $place,
-							);
-							$location_index++;
-						}
+			$location_index = 0;
+			foreach ( $this->supported_formats as $format ) {
+				if ( isset( $location[ $format ] ) ) {
+					$meta['location'][ $location_index ] = array();
+					foreach ( $location[ $format ] as $place ) {
+						$meta['location'][ $location_index ][] = array(
+							'param'   => $format,
+							'operator'   => '==',
+							'value'   => $place,
+						);
+						$location_index++;
 					}
 				}
 			}
-			if ( isset( $layout ) && count( $layout ) ) {
-				acf_add_local_field_group( $meta );
-			}
+			acf_add_local_field_group( $meta );
 		}
 	}
 
@@ -128,6 +124,10 @@ class Kili_Theme_Blocks {
 	 */
 	private function get_file_layout( $blocks_path, $file ) {
 		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
 		$current_layout = null;
 		$sub_fields = null;
 		$get_json_content = $wp_filesystem->get_contents( $file );
@@ -188,7 +188,9 @@ class Kili_Theme_Blocks {
 				$current_layout_size = count( $current_layout );
 				if ( $current_layout_size > 0 ) {
 					for ( $j = 0; $j < $current_layout_size; $j++ ) {
-						array_push( $layouts, $current_layout[ $j ] );
+						if ( isset( $current_layout[ $j ] ) ) {
+							array_push( $layouts, $current_layout[ $j ] );
+						}
 					}
 				}
 			}
