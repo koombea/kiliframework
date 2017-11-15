@@ -29,6 +29,11 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.1.2
+  * Validate if Child is present render twig files
+  * Add Asset manifest support to Child Theme
+  * Add dynamic styles support to Child Theme
+  * Code style improvements
 * 0.1.1
   * Bugfix: layout now is visible if there are no json blocks
   * Code style improvements
