@@ -82,7 +82,7 @@ class Kili_Dynamic_Styles {
 			}
 		}
 		$current_style = file_exists( $this->style_file_name ) ? $wp_filesystem->get_contents( $this->style_file_name ) : '';
-		if ( strcasecmp( $current_style, '' ) !== 0 && strcasecmp( $current_style, $style ) !== 0 ) {
+		if ( strcasecmp( $current_style, $style ) !== 0 ) {
 			if ( ! is_dir( $this->style_dir ) ) {
 				wp_mkdir_p( $this->style_dir, FS_CHMOD_DIR );
 			}
@@ -158,7 +158,7 @@ class Kili_Dynamic_Styles {
 		$replacements = array();
 		foreach ( $array as $key => $value ) {
 			if ( is_array( $value ) ) {
-				$replacements = array_merge( $replacements, get_array_replacement( $value, $key . '_' ) );
+				$replacements = array_merge( $replacements, $this->get_array_replacement( $value, $key . '_' ) );
 			} elseif ( is_string( $value ) && strcasecmp( trim( $value ), '' ) !== 0 ) {
 				$replacements[ '{{' . $prefix . $key . '}}' ] = trim( $value );
 			}

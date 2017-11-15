@@ -66,7 +66,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 *
 		 * @var object
 		 */
-		protected $dynamic_styles;
+		public $dynamic_styles;
 
 		/**
 		 * Handler for class Flexible_Content_Modal
@@ -107,7 +107,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->flexible_modal = new Flexible_Content_Modal();
 			$this->kili_context = new Kili_Context();
 			$this->kili_layout = new Kili_Layout();
-			$this->base_blocks_style = '';
 			$this->add_actions();
 			if ( class_exists( 'Timber' ) ) {
 				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
@@ -197,7 +196,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				$page_fields['page_id'] = $all_pages[ $key ]->ID;
 				array_push( $fields, $page_fields );
 			}
-			$this->dynamic_styles->set_base_styles( $this->base_blocks_style );
 			$this->dynamic_styles->process_blocks_styles( $fields );
 			$this->kili_router->set_current_view();
 		}

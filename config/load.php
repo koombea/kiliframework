@@ -15,5 +15,14 @@ require_once( get_template_directory() . '/config/defaults.php' );
 */
 include_once( FRAMEWORK_DIR . 'app/controllers/class-kili-framework.php' );
 
+/**
+ * Initializate Kili Class
+*/
 $kili_framework = new Kili_Framework();
-$kili_framework->render_pages();
+
+/**
+ * Validate if child is present render twig files
+*/
+if ( strcasecmp( THEME_NAME, FRAMEWORK_NAME ) === 0 ) {
+    $kili_framework->render_pages();
+}

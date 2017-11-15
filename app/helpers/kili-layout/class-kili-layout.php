@@ -44,7 +44,7 @@ class Kili_Layout {
 			'blocks_id' => $blocks_id,
 			'block_position' => $block_position,
 			'page_block' => $page_block,
-			'block_unique_class' => $page_block['acf_fc_layout'] . '-' . $block_position . '-' . $context['post']->id,
+			'block_unique_class' => $page_block['acf_fc_layout'] . '_' . $block_position . '_' . $context['post']->id,
 		);
 		$context = array_merge( $context, $settings );
 		Timber::render( $file_to_render, $context, false );
