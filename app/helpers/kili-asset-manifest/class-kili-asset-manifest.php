@@ -13,54 +13,34 @@
 class Kili_Asset_Manifest {
 	/**
 	 * Json manifest content
+	 *
 	 * @var string
 	 */
 	private $manifest_content;
 
 	/**
 	 * Class constructor
+	 *
 	 * @param string $manifest_path Json Asset path.
 	 */
 	public function __construct( $manifest_path ) {
-
+		global $wp_filesystem;
+		if ( empty( $wp_filesystem ) ) {
+			require_once( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
+		}
+		$this->manifest_content = [];
 		if ( file_exists( $manifest_path ) ) {
-			$this->manifest_content = json_decode( wp_remote_get( $manifest_path ), true );
-		} else {
-			$this->manifest_content = [];
+			$this->manifest_content = json_decode( $wp_filesystem->get_contents( $manifest_path ), true );
 		}
 	}
 
 	/**
 	 * Get the cache-busted filename
+	 *
 	 * @return string return manifest file content
 	 */
 	public function get() {
 		return $this->manifest_content;
 	}
-
-	/**
-	 * Get the asset path
-	 * @param  string $key
-	 * @param  array $default
-	 * @return [type]
-	 */
-	public function getPath( $key = '', $default = null ) {
-
-		$collection = $this->manifest_content;
-		if ( is_null( $key ) ) {
-			return $collection;
-		}
-		if ( isset( $collection[$key] ) ) {
-			return $collection[$key];
-		}
-		foreach ( explode( '.', $key ) as $segment ) {
-			if ( !isset( $collection[$segment] ) ) {
-				return $default;
-			} else {
-				$collection = $collection[$segment];
-			}
-		}
-		return $collection;
-	}
 }
-

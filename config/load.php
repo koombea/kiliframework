@@ -24,5 +24,5 @@ $kili_framework = new Kili_Framework();
  * Validate if child is present render twig files
 */
 if ( strcasecmp( THEME_NAME, FRAMEWORK_NAME ) === 0 ) {
-    $kili_framework->render_pages();
+	$kili_framework->render_pages();
 }

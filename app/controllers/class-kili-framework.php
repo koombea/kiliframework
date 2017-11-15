@@ -250,8 +250,9 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		}
 
 		/**
-		 * Get the asset path for enqueue style and scripts files
-		 * @param  string $file the asset file path
+		 * Get the asset path for enqueue style and scripts files.
+		 *
+		 * @param string $file the asset file path.
 		 * @return string asset path
 		 */
 		public function asset_path( $file ) {
@@ -261,15 +262,14 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			static $manifest;
 
 			if ( empty( $manifest ) ) {
-				$manifest_path = THEME_DIR . 'dist/' . 'assets.json';
+				$manifest_path = THEME_DIR . 'dist/assets.json';
 				$manifest = new Kili_Asset_Manifest( $manifest_path );
 			}
 
 			if ( array_key_exists( $file, $manifest->get() ) ) {
-				return $dist_path . $directory . $manifest->get()[$file];
-			} else {
-				return $dist_path . $directory . $file;
+				return $dist_path . $directory . $manifest->get()[ $file ];
 			}
+			return $dist_path . $directory . $file;
 		}
 	}
 }
