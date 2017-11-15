@@ -35,8 +35,8 @@ class Kili_Dynamic_Styles {
 	 */
 	public function __construct() {
 		$this->base_styles = '';
-		$this->style_dir = get_stylesheet_directory() . '/dist/styles/';
-		$this->style_file_name = $this->style_dir . 'block_styles.css';
+		$this->style_dir = THEME_DIR . 'dist/styles/';
+		$this->style_file_name = $this->style_dir . 'block-styles.css';
 	}
 
 	/**

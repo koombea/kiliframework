@@ -97,6 +97,13 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		public $kili_layout;
 
 		/**
+		 * Handler for class Kili_Asset_Manifest
+		 *
+		 * @var object
+		 */
+		public $kili_asset_manifest;
+
+		/**
 		 * Class constructor
 		 */
 		public function __construct() {
@@ -240,6 +247,29 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 */
 		public function include_parent_assets() {
 			wp_enqueue_style( 'parent-theme-style', FRAMEWORK_URL . 'style.css', array(), false, null );
+		}
+
+		/**
+		 * Get the asset path for enqueue style and scripts files
+		 * @param  string $file the asset file path
+		 * @return string asset path
+		 */
+		public function asset_path( $file ) {
+			$dist_path = THEME_URL . 'dist/';
+			$directory = dirname( $file ) . '/';
+			$file = basename( $file );
+			static $manifest;
+
+			if ( empty( $manifest ) ) {
+				$manifest_path = THEME_DIR . 'dist/' . 'assets.json';
+				$manifest = new Kili_Asset_Manifest( $manifest_path );
+			}
+
+			if ( array_key_exists( $file, $manifest->get() ) ) {
+				return $dist_path . $directory . $manifest->get()[$file];
+			} else {
+				return $dist_path . $directory . $file;
+			}
 		}
 	}
 }
