@@ -175,12 +175,16 @@ class Kili_Router {
 				}
 			} elseif ( ! $pagename && $object->ID ) {
 				$pagename = $object->post_name;
-			} elseif ( $pagename ) {
-				$view = "{$type}-{$pagename}.twig";
-			} elseif ( $object->ID ) {
-				$view = "{$type}-{$object->ID}.twig";
-			} elseif ( $object ) {
-				$view = "{$type}-{$object->post_type}.twig";
+				$is_custom_post = Kili_Layout::is_custom_post_type( $object );
+				if ( $is_custom_post ) {
+					$view = "{$type}-{$object->post_type}.twig";
+				} elseif ( $pagename ) {
+					$view = "{$type}-{$pagename}.twig";
+				} elseif ( $object->ID ) {
+					$view = "{$type}-{$object->ID}.twig";
+				} elseif ( $object ) {
+					$view = "{$type}-{$object->post_type}.twig";
+				}
 			}
 		}
 		return $view;

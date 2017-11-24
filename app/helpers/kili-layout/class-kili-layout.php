@@ -69,4 +69,27 @@ class Kili_Layout {
 		}
 		return $file_name;
 	}
+
+	/**
+	 * Determine if a post object is a custom post type
+	 *
+	 * @param object $post The post object.
+	 * @return boolean If is a custom post type
+	 */
+	public static function is_custom_post_type( $post = null ) {
+		$all_custom_post_types = get_post_types( array(
+			'_builtin' => false,
+		) );
+		// there are no custom post types.
+		if ( empty( $all_custom_post_types ) ) {
+			return false;
+		}
+		$custom_types = array_keys( $all_custom_post_types );
+		$current_post_type = get_post_type( $post );
+		// could not detect current type.
+		if ( ! $current_post_type ) {
+			return false;
+		}
+		return in_array( $current_post_type, $custom_types );
+	}
 }

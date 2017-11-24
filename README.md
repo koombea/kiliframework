@@ -29,6 +29,9 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.1.3
+  * Updated styles for layout builder modal
+  * Fixed the router to support some custom post types
 * 0.1.2
   * Validate if Child is present render twig files
   * Add Asset manifest support to Child Theme
