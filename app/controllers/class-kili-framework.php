@@ -199,7 +199,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$all_pages = $pages_query->get_posts( $args );
 			$all_pages_length = count( $all_pages );
 			for ( $key = 0; $key < $all_pages_length; $key++ ) {
-				$page_fields = get_fields( $all_pages[ $key ]->ID );
+				$page_fields = function_exists( 'get_fields' ) ? get_fields( $all_pages[ $key ]->ID ) : '';
 				$page_fields['page_id'] = $all_pages[ $key ]->ID;
 				array_push( $fields, $page_fields );
 			}
