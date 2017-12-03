@@ -27,6 +27,16 @@ final class Tgm_Load {
 			'required'           => false,
 		),
 		array(
+			'name'                  => 'Advanced Custom Fields',
+			'slug'                  => 'advanced-custom-fields',
+			'source'                => 'https://github.com/AdvancedCustomFields/acf/archive/master.zip',
+			'required'              => false,
+			'version'               => '5.6.5',
+			'force_activation'      => false,
+			'force_deactivation'    => false,
+			'external_url'          => 'https://github.com/AdvancedCustomFields/acf',
+		),
+		array(
 			'name'                  => 'Kili. Automatic Updater',
 			'slug'                  => 'kili-automatic-updater',
 			'source'                => 'https://github.com/fabolivark/kili-automatic-updater/archive/master.zip',
