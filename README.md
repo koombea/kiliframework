@@ -29,6 +29,8 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.1.5
+  * Add support for child theme page templates
 * 0.1.4
   * Add context support for child theme.
   * Delete unnecessary TGM languages files and disable TGM plugin ACF free version when is active pro version.

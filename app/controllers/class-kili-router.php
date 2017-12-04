@@ -186,6 +186,8 @@ class Kili_Router {
 				} elseif ( $object ) {
 					$view = "{$type}-{$object->post_type}.twig";
 				}
+			} elseif ( is_page_template( get_page_template_slug( $object->id ) ) ) {
+				$view = str_ireplace( 'php', 'twig', basename( get_page_template_slug( $object->id ) ) );
 			}
 		}
 		return $view;
