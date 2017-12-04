@@ -27,16 +27,6 @@ final class Tgm_Load {
 			'required'           => false,
 		),
 		array(
-			'name'                  => 'Advanced Custom Fields',
-			'slug'                  => 'advanced-custom-fields',
-			'source'                => 'https://github.com/AdvancedCustomFields/acf/archive/master.zip',
-			'required'              => false,
-			'version'               => '5.6.5',
-			'force_activation'      => false,
-			'force_deactivation'    => false,
-			'external_url'          => 'https://github.com/AdvancedCustomFields/acf',
-		),
-		array(
 			'name'                  => 'Kili. Automatic Updater',
 			'slug'                  => 'kili-automatic-updater',
 			'source'                => 'https://github.com/fabolivark/kili-automatic-updater/archive/master.zip',
@@ -47,11 +37,27 @@ final class Tgm_Load {
 			'external_url'          => 'https://github.com/fabolivark/kili-automatic-updater',
 		),
     );
+
+    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+    if ( ! is_plugin_active( 'advanced-custom-fields-pro/acf.php' ) ) {
+		$plugins[] = array(
+						'name'                  => 'Advanced Custom Fields',
+						'slug'                  => 'advanced-custom-fields',
+						'source'                => 'https://github.com/AdvancedCustomFields/acf/archive/master.zip',
+						'required'              => false,
+						'version'               => '5.6.5',
+						'force_activation'      => false,
+						'force_deactivation'    => false,
+						'external_url'          => 'https://github.com/AdvancedCustomFields/acf',
+					);
+	}
+
     $config = array(
       'id'           => 'kili_tgmpa',
       'default_path' => '',
       'menu'         => 'tgmpa-install-plugins',
-      'parent_slug'  => 'themes.php',
+      'parent_slug'  => 'plugins.php',
       'capability'   => 'edit_theme_options',
       'has_notices'  => true,
       'dismissable'  => true,
