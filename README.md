@@ -29,6 +29,11 @@ See [contributing](CONTRIBUTING.md)
 
 ## Version History
 
+* 0.1.4
+  * Add context support for child theme.
+  * Delete unnecessary TGM languages files and disable TGM plugin ACF free version when is active pro version.
+  * Add html5 tags for default kili layout.
+  * Add ACF free version to TGM plugins installer.
 * 0.1.3
   * Updated styles for layout builder modal
   * Fixed the router to support some custom post types

@@ -48,7 +48,8 @@ class Kili_Router {
 	 *
 	 * @return void
 	 */
-	public function set_current_view() {
+	public function set_current_view( $context ) {
+		$this->context = $context;
 		foreach ( $this->template_types as $type ) {
 			add_filter( "{$type}_template", array( $this, 'query_template' ) );
 		}

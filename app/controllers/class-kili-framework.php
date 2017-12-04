@@ -175,7 +175,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 *
 		 * @return void
 		 */
-		public function render_pages() {
+		public function render_pages( $context ) {
 			$fields = array();
 			$args = array(
 				'sort_order' => 'asc',
@@ -204,7 +204,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				array_push( $fields, $page_fields );
 			}
 			$this->dynamic_styles->process_blocks_styles( $fields );
-			$this->kili_router->set_current_view();
+			$this->kili_router->set_current_view( $context );
 		}
 
 		/**
