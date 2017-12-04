@@ -175,7 +175,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 *
 		 * @return void
 		 */
-		public function render_pages( $context ) {
+		public function render_pages( $context = null ) {
 			$fields = array();
 			$args = array(
 				'sort_order' => 'asc',
