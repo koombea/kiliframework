@@ -57,6 +57,10 @@ class Kili_Theme_Blocks {
 					}
 				}
 			}
+			$instructions = __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' );
+			if ( ! count( $layouts ) ) {
+				$instructions = '<div class="kili-missing-block kili-soft"><span class="dashicons dashicons-warning"></span> <span>' . __( 'Please add some json blocks from ACF groups', 'kiliframework' ) . '</span></div>';
+			}
 			$meta = array(
 				'key' => $location['flexible_content_group'],
 				'title' => $location['layout_title'],
@@ -66,7 +70,7 @@ class Kili_Theme_Blocks {
 						'label' => '',
 						'name' => $location['flexible_content_id'],
 						'type' => 'flexible_content',
-						'instructions' => __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' ),
+						'instructions' => $instructions,
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(

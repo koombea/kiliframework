@@ -46,6 +46,7 @@ class Kili_Router {
 	 * Get current Twig view based on WordPress page hierarchy.
 	 * Aditional add to context required views data.
 	 *
+	 * @param array $context Page context data.
 	 * @return void
 	 */
 	public function set_current_view( $context ) {
@@ -97,9 +98,9 @@ class Kili_Router {
 					$kili_context->set_context( $this->context );
 					$this->context = $kili_context->get_context();
 					Timber::render( $template, $this->context );
-				} else {
-					include_once( $template );
+					return ;
 				}
+				include_once( $template );
 			}
 		}
 	}
@@ -115,21 +116,32 @@ class Kili_Router {
 	private function locate_template( $template_names ) {
 		$located = '';
 		foreach ( (array) $template_names as $template_name ) {
-			if ( ! $template_name ) {
-				continue;
-			}
-			if ( file_exists( STYLESHEETPATH . '/views/' . $template_name ) ) {
-				$located = STYLESHEETPATH . '/views/' . $template_name;
-				break;
-			} elseif ( file_exists( TEMPLATEPATH . '/views/' . $template_name ) ) {
-				$located = TEMPLATEPATH . '/views/' . $template_name;
-				break;
-			} elseif ( file_exists( ABSPATH . WPINC . '/views/theme-compat/' . $template_name ) ) {
-				$located = ABSPATH . WPINC . '/views/theme-compat/' . $template_name;
-				break;
+			$located = $this->get_template_filename( $template_name );
+			if ( strcasecmp( $located, '' ) !== 0 ) {
+				return $located;
 			}
 		}
 		return $located;
+	}
+
+	/**
+	 * Check if the template exists and return its path
+	 *
+	 * @param string $template_name The template name.
+	 * @return string The path to the template file
+	 */
+	private function get_template_filename( $template_name ) {
+		$filename = '';
+		if ( ! $template_name ) {
+			$filename = '';
+		} elseif ( file_exists( STYLESHEETPATH . '/views/' . $template_name ) ) {
+			$filename = STYLESHEETPATH . '/views/' . $template_name;
+		} elseif ( file_exists( TEMPLATEPATH . '/views/' . $template_name ) ) {
+			$filename = TEMPLATEPATH . '/views/' . $template_name;
+		} elseif ( file_exists( ABSPATH . WPINC . '/views/theme-compat/' . $template_name ) ) {
+			$filename = ABSPATH . WPINC . '/views/theme-compat/' . $template_name;
+		}
+		return $filename;
 	}
 
 	/**
@@ -147,48 +159,50 @@ class Kili_Router {
 		$this->context['post'] = new TimberPost();
 		if ( is_page_template( 'page-templates/layout-builder.php' ) ) {
 			$this->context['is_kili'] = true;
+			$view = '';
 		}
-		if ( $object ) {
-			if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
-				$view = '404.twig';
-				if ( $is_preview && $is_user_login ) {
-					$view = "{$type}.twig";
-				} elseif ( $object ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				}
-			} elseif ( post_password_required( $object->ID ) ) {
-				$view = "{$type}-password.twig";
-				if ( $is_preview && $is_user_login ) {
-					$view = "{$type}.twig";
-					if ( $object ) {
-						$view = "{$type}-{$object->post_type}.twig";
-					}
-				}
-			} elseif ( strcasecmp( $object->post_status, 'pending' ) === 0 ) {
-				$current_user = wp_get_current_user();
-				$view = '404.twig';
-				if ( $current_user->ID === $object->post_author ) {
-					if ( $is_preview && $is_user_login ) {
-						$view = "{$type}.twig";
-					} elseif ( $object ) {
-						$view = "{$type}-{$object->post_type}.twig";
-					}
-				}
-			} elseif ( ! $pagename && $object->ID ) {
-				$pagename = $object->post_name;
-				$is_custom_post = Kili_Layout::is_custom_post_type( $object );
-				if ( $is_custom_post ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				} elseif ( $pagename ) {
-					$view = "{$type}-{$pagename}.twig";
-				} elseif ( $object->ID ) {
-					$view = "{$type}-{$object->ID}.twig";
-				} elseif ( $object ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				}
-			} elseif ( is_page_template( get_page_template_slug( $object->id ) ) ) {
-				$view = str_ireplace( 'php', 'twig', basename( get_page_template_slug( $object->id ) ) );
+		if ( ! $object ) {
+			$view = '';
+		}
+		if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
+			if ( $is_preview && $is_user_login ) {
+				$view = "{$type}.twig";
+			} elseif ( $object ) {
+				$view = "{$type}-{$object->post_type}.twig";
 			}
+			$view = '404.twig';
+		} elseif ( post_password_required( $object->ID ) ) {
+			if ( $is_preview && $is_user_login ) {
+				if ( $object ) {
+					$view = "{$type}-{$object->post_type}.twig";
+				}
+				$view = "{$type}.twig";
+			}
+			$view = "{$type}-password.twig";
+		} elseif ( strcasecmp( $object->post_status, 'pending' ) === 0 ) {
+			$current_user = wp_get_current_user();
+			if ( $current_user->ID === $object->post_author ) {
+				if ( $is_preview && $is_user_login ) {
+					$view = "{$type}.twig";
+				} elseif ( $object ) {
+					$view = "{$type}-{$object->post_type}.twig";
+				}
+			}
+			$view = '404.twig';
+		} elseif ( ! $pagename && $object->ID ) {
+			$pagename = $object->post_name;
+			$is_custom_post = Kili_Layout::is_custom_post_type( $object );
+			if ( $is_custom_post ) {
+				$view = "{$type}-{$object->post_type}.twig";
+			} elseif ( $pagename ) {
+				$view = "{$type}-{$pagename}.twig";
+			} elseif ( $object->ID ) {
+				$view = "{$type}-{$object->ID}.twig";
+			} elseif ( $object ) {
+				$view = "{$type}-{$object->post_type}.twig";
+			}
+		} elseif ( is_page_template( get_page_template_slug( $object->id ) ) ) {
+			$view = str_ireplace( 'php', 'twig', basename( get_page_template_slug( $object->id ) ) );
 		}
 		return $view;
 	}

@@ -86,7 +86,6 @@
   font-size:13px;
   letter-spacing:.06px;
   margin:6px 28px 21px;
-  max-width:400px;
   vertical-align:top;
 }
 #acf-kili_group_container.acf-postbox .acf-field.acf-field-flexible-content .acf-label label {
@@ -368,6 +367,7 @@ body.acf-modal-open {
 }
 #acf-kili_group_container .acf-tab-group {
   border-bottom:0!important;
+  border-top:0!important;
   padding-left:0;
 }
 #acf-kili_group_container .acf-tab-group li {
@@ -403,4 +403,17 @@ body.acf-modal-open {
 }
 .mce-floatpanel {
   z-index:100060!important;
+}
+.kili-missing-block {
+  background-color: #d6ba46;
+  color: #FFFFFF;
+}
+
+.kili-container {
+  margin: auto;
+  max-width: 1280px;
+}
+
+.kili-soft {
+  padding: 15px;
 }

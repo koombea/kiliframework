@@ -178,22 +178,14 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		public function render_pages( $context = null ) {
 			$fields = array();
 			$args = array(
-				'sort_order' => 'asc',
-				'sort_column' => 'ID',
 				'hierarchical' => 1,
-				'exclude' => '',
-				'include' => '',
 				'meta_key' => 'kili_block_builder',
 				'meta_value' => '',
-				'authors' => '',
-				'child_of' => 0,
-				'parent' => -1,
-				'exclude_tree' => '',
-				'number' => '',
-				'offset' => 0,
-				'post_type' => get_post_types(),
-				'post_status' => 'publish',
 				'numberposts' => -1,
+				'post_status' => 'publish',
+				'post_type' => get_post_types(),
+				'sort_column' => 'ID',
+				'sort_order' => 'asc',
 			);
 			$pages_query = new WP_Query( $args );
 			$all_pages = $pages_query->get_posts( $args );

@@ -18,55 +18,48 @@ final class Theme_Data {
 	 * @return array Theme data
 	 */
 	public function kili_get_theme_data( $type = 'child', $theme_dir = null, $stylesheet = null ) {
-		$theme_data = null;
-		if ( function_exists( 'wp_get_theme' ) ) {
-			$tmp = wp_get_theme();
-			if ( null === $theme_dir ) {
-				$theme_dir = strcasecmp( $type,'parent' ) === 0 ? get_template_directory() : get_stylesheet_directory();
-			}
+		if ( null === $theme_dir ) {
+			$theme_dir = strcasecmp( $type, 'parent' ) === 0 ? get_template_directory() : get_stylesheet_directory();
 		}
-
-		unset( $tmp );
-
-		if ( file_exists( $theme_dir . '/style.css' ) && is_dir( $theme_dir ) ) {
-			$stylesheet_files = array();
-			$template_files   = array();
-			$theme_files = $this->kili_scandir( $theme_dir );
-
-			foreach ( $theme_files as $file ) {
-				if ( is_file( $theme_dir . '/' . $file ) ) {
-					if ( preg_match( '/(.+).css/', $file ) ) {
-						$stylesheet_files[] = $theme_dir . '/' . $file;
-					} else {
-						$template_files[] = $theme_dir . '/' . $file;
-					}
+		if ( ! file_exists( $theme_dir . '/style.css' ) ) {
+			return null;
+		}
+		$stylesheet_files = array();
+		$template_files   = array();
+		$theme_files = $this->kili_scandir( $theme_dir );
+		foreach ( $theme_files as $file ) {
+			if ( is_file( $theme_dir . '/' . $file ) ) {
+				if ( preg_match( '/(.+).css/', $file ) ) {
+					$stylesheet_files[] = $theme_dir . '/' . $file;
+				} else {
+					$template_files[] = $theme_dir . '/' . $file;
 				}
 			}
-			if ( null === $stylesheet ) {
-				$explode_theme_dir = explode( '/', $theme_dir );
-				$stylesheet       = array_pop( $explode_theme_dir );
-			}
-
-			$theme = wp_get_theme( $stylesheet );
-			$theme_data = array(
-				'name'            => $theme->get( 'Name' ),
-				'uri'             => $theme->get( 'ThemeURI' ),
-				'description'     => $theme->get( 'Description' ),
-				'author'          => $theme->get( 'Author' ),
-				'author_uri'       => $theme->get( 'AuthorURI' ),
-				'version'         => $theme->get( 'Version' ),
-				'template'        => $theme->get( 'Template' ),
-				'status'          => $theme->get( 'Status' ),
-				'tags'            => $theme->get( 'Tags' ),
-				'text_domain'      => $theme->get( 'TextDomain' ),
-				'domain_path'      => $theme->get( 'DomainPath' ),
-				'title'           => $theme->get( 'Name' ),
-				'author_name'      => $theme->get( 'Author' ),
-				'stylesheet_files' => $stylesheet_files,
-				'template_files'   => $template_files,
-				'folder'          => $stylesheet,
-			);
 		}
+		if ( null === $stylesheet ) {
+			$explode_theme_dir = explode( '/', $theme_dir );
+			$stylesheet       = array_pop( $explode_theme_dir );
+		}
+
+		$theme = wp_get_theme( $stylesheet );
+		$theme_data = array(
+			'name'            => $theme->get( 'Name' ),
+			'uri'             => $theme->get( 'ThemeURI' ),
+			'description'     => $theme->get( 'Description' ),
+			'author'          => $theme->get( 'Author' ),
+			'author_uri'       => $theme->get( 'AuthorURI' ),
+			'version'         => $theme->get( 'Version' ),
+			'template'        => $theme->get( 'Template' ),
+			'status'          => $theme->get( 'Status' ),
+			'tags'            => $theme->get( 'Tags' ),
+			'text_domain'      => $theme->get( 'TextDomain' ),
+			'domain_path'      => $theme->get( 'DomainPath' ),
+			'title'           => $theme->get( 'Name' ),
+			'author_name'      => $theme->get( 'Author' ),
+			'stylesheet_files' => $stylesheet_files,
+			'template_files'   => $template_files,
+			'folder'          => $stylesheet,
+		);
 		return $theme_data;
 	}
 
