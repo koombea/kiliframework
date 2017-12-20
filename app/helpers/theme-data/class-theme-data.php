@@ -29,17 +29,11 @@ final class Theme_Data {
 		$theme_files = $this->kili_scandir( $theme_dir );
 		foreach ( $theme_files as $file ) {
 			if ( is_file( $theme_dir . '/' . $file ) ) {
-				if ( preg_match( '/(.+).css/', $file ) ) {
-					$stylesheet_files[] = $theme_dir . '/' . $file;
-				} else {
-					$template_files[] = $theme_dir . '/' . $file;
-				}
+				$this->decide_assign_array( $stylesheet_files, $template_files, preg_match( '/(.+).css/', $file ) ? 'first' : 'second', $theme_dir . '/' . $file );
 			}
 		}
-		if ( null === $stylesheet ) {
-			$explode_theme_dir = explode( '/', $theme_dir );
-			$stylesheet       = array_pop( $explode_theme_dir );
-		}
+		$explode_theme_dir = explode( '/', $theme_dir );
+		$stylesheet = ( null === $stylesheet ) ? array_pop( $explode_theme_dir ) : $stylesheet;
 
 		$theme = wp_get_theme( $stylesheet );
 		$theme_data = array(
@@ -61,6 +55,23 @@ final class Theme_Data {
 			'folder'          => $stylesheet,
 		);
 		return $theme_data;
+	}
+
+	/**
+	 * Decide in which array put the value
+	 *
+	 * @param array  $array1 First array.
+	 * @param array  $array2 Second array.
+	 * @param string $which_one In which array to put the value.
+	 * @param mixed  $value The value to assign.
+	 * @return void
+	 */
+	private function decide_assign_array( $array1, $array2, $which_one, $value ) {
+		if ( strcasecmp( $which_one, 'first' ) ) {
+			$array1[] = $value;
+		} elseif ( strcasecmp( $which_one, 'second' ) ) {
+			$array2[] = $value;
+		}
 	}
 
 	/**

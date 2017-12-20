@@ -90,6 +90,6 @@ class Kili_Layout {
 		if ( ! $current_post_type ) {
 			return false;
 		}
-		return in_array( $current_post_type, $custom_types );
+		return in_array( $current_post_type, $custom_types, true );
 	}
 }

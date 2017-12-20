@@ -64,44 +64,43 @@ class Kili_Router {
 	 * @return void
 	 */
 	public function query_template( $fallback ) {
-		if ( $this->do_render ) {
-			// trim '_template' from end.
-			$type      = substr( current_filter(), 0, - 9 );
-			$templates = array();
-			switch ( $type ) {
-				case '404':
-				case 'search':
-				case 'attachment':
-				case 'taxonomy':
-				case 'frontpage':
-				case 'home':
-				case 'single':
-				case 'page':
-				case 'singular':
-				case 'category':
-				case 'tag':
-				case 'author':
-				case 'archive':
-					include_once( FRAMEWORK_DIR . 'app/routes/route-' . $type . '.php' );
-					break;
-				default:
-					$templates = array( "{$type}.twig" );
+		if ( ! $this->do_render ) {
+			return;
+		}
+		// trim '_template' from end.
+		$type      = substr( current_filter(), 0, - 9 );
+		$templates = array();
+		switch ( $type ) {
+			case '404':
+			case 'search':
+			case 'attachment':
+			case 'taxonomy':
+			case 'frontpage':
+			case 'home':
+			case 'single':
+			case 'page':
+			case 'singular':
+			case 'category':
+			case 'tag':
+			case 'author':
+			case 'archive':
+				include_once( FRAMEWORK_DIR . 'app/routes/route-' . $type . '.php' );
+				break;
+			default:
+				$templates = array( "{$type}.twig" );
+		}
+		$template = $this->locate_template( $templates );
+		$template = empty( $template ) ? $fallback : $template;
+		if ( strcasecmp( $template, '' ) !== 0 ) {
+			$this->do_render = false;
+			if ( strpos( $template, 'index.php' ) === false ) {
+				$kili_context = new Kili_Context();
+				$kili_context->set_context( $this->context );
+				$this->context = $kili_context->get_context();
+				Timber::render( $template, $this->context );
+				return ;
 			}
-			$template = $this->locate_template( $templates );
-			if ( empty( $template ) ) {
-				$template = $fallback;
-			}
-			if ( strcasecmp( $template, '' ) !== 0 ) {
-				$this->do_render = false;
-				if ( strpos( $template, 'index.php' ) === false ) {
-					$kili_context = new Kili_Context();
-					$kili_context->set_context( $this->context );
-					$this->context = $kili_context->get_context();
-					Timber::render( $template, $this->context );
-					return ;
-				}
-				include_once( $template );
-			}
+			include_once( $template );
 		}
 	}
 
@@ -154,56 +153,82 @@ class Kili_Router {
 	public function get_protected_view( $object, $type ) {
 		$view = '';
 		$pagename = get_query_var( 'pagename' );
-		$is_user_login = is_user_logged_in();
+		$is_user_logged_in = is_user_logged_in();
 		$is_preview = get_query_var( 'preview' );
 		$this->context['post'] = new TimberPost();
+		$current_user = wp_get_current_user();
 		if ( is_page_template( 'page-templates/layout-builder.php' ) ) {
 			$this->context['is_kili'] = true;
-			$view = '';
 		}
-		if ( ! $object ) {
-			$view = '';
-		}
-		if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 ) {
-			if ( $is_preview && $is_user_login ) {
-				$view = "{$type}.twig";
-			} elseif ( $object ) {
-				$view = "{$type}-{$object->post_type}.twig";
-			}
-			$view = '404.twig';
+		if ( strcasecmp( $object->post_status, 'private' ) === 0 || strcasecmp( $object->post_status, 'draft' ) === 0 || strcasecmp( $object->post_status, 'future' ) === 0 || strcasecmp( $object->post_status, 'pending' ) === 0 ) {
+			$view = $this->get_protected_post_view( array(
+				'default' => '404.twig',
+				'is_preview' => $is_preview,
+				'is_user_logged_in' => $is_user_logged_in,
+				'object' => $object,
+				'show' => strcasecmp( '' . $current_user->ID, $object->post_author ) === 0,
+				'type' => $type,
+			) );
 		} elseif ( post_password_required( $object->ID ) ) {
-			if ( $is_preview && $is_user_login ) {
-				if ( $object ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				}
-				$view = "{$type}.twig";
-			}
-			$view = "{$type}-password.twig";
-		} elseif ( strcasecmp( $object->post_status, 'pending' ) === 0 ) {
-			$current_user = wp_get_current_user();
-			if ( $current_user->ID === $object->post_author ) {
-				if ( $is_preview && $is_user_login ) {
-					$view = "{$type}.twig";
-				} elseif ( $object ) {
-					$view = "{$type}-{$object->post_type}.twig";
-				}
-			}
-			$view = '404.twig';
+			$view = $this->get_protected_post_view( array(
+				'default' => "{$type}-password.twig",
+				'is_preview' => $is_preview,
+				'is_user_logged_in' => $is_user_logged_in,
+				'object' => $object,
+				'show' => strcasecmp( '' . $current_user->ID, $object->post_author ) === 0,
+				'type' => $type,
+			) );
 		} elseif ( ! $pagename && $object->ID ) {
-			$pagename = $object->post_name;
-			$is_custom_post = Kili_Layout::is_custom_post_type( $object );
-			if ( $is_custom_post ) {
-				$view = "{$type}-{$object->post_type}.twig";
-			} elseif ( $pagename ) {
-				$view = "{$type}-{$pagename}.twig";
-			} elseif ( $object->ID ) {
-				$view = "{$type}-{$object->ID}.twig";
-			} elseif ( $object ) {
-				$view = "{$type}-{$object->post_type}.twig";
-			}
+			$view = $this->get_page_view_name( array(
+				'object' => $object,
+				'type' => $type,
+			) );
 		} elseif ( is_page_template( get_page_template_slug( $object->id ) ) ) {
 			$view = str_ireplace( 'php', 'twig', basename( get_page_template_slug( $object->id ) ) );
 		}
 		return $view;
+	}
+
+	/**
+	 * Return the view file name for protected pages and posts
+	 *
+	 * @param array $options View options.
+	 * @return string View name
+	 */
+	private function get_protected_post_view( $options = array() ) {
+		$response = $options['default'] ? $options['default'] : '';
+		if ( ! $options['show'] ) {
+			return $response;
+		}
+		if ( $options['is_preview'] && $options['is_user_logged_in'] ) {
+			$response = "{$options['type']}.twig";
+		} elseif ( $options['object'] ) {
+			$response = "{$options['type']}-{$options['object']->post_type}.twig";
+		}
+		return $response;
+	}
+
+	/**
+	 * Return the view file name
+	 *
+	 * @param array $options View options.
+	 * @return string View file name
+	 */
+	private function get_page_view_name( $options ) {
+		$response = '';
+		$object = $options['object'];
+		$type = $options['type'];
+		$pagename = $object->post_name;
+		$is_custom_post = Kili_Layout::is_custom_post_type( $object );
+		if ( $is_custom_post ) {
+			$response = "{$type}-{$object->post_type}.twig";
+		} elseif ( $pagename ) {
+			$response = "{$type}-{$pagename}.twig";
+		} elseif ( $object->ID ) {
+			$response = "{$type}-{$object->ID}.twig";
+		} elseif ( $object ) {
+			$response = "{$type}-{$object->post_type}.twig";
+		}
+		return $response;
 	}
 }

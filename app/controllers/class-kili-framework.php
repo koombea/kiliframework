@@ -115,13 +115,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->kili_context = new Kili_Context();
 			$this->kili_layout = new Kili_Layout();
 			$this->add_actions();
-			if ( class_exists( 'Timber' ) ) {
-				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
-			} else {
-				add_action( 'admin_notices', function() {
-					echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
-				} );
-			}
+			$this->check_timber_install();
 			$this->init_default_block_builder();
 			$this->flexible_modal->init();
 		}
@@ -262,6 +256,21 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				return $dist_path . $directory . $manifest->get()[ $file ];
 			}
 			return $dist_path . $directory . $file;
+		}
+
+		/**
+		 * Check if Timber is active
+		 *
+		 * @return void
+		 */
+		private function check_timber_install() {
+			if ( class_exists( 'Timber' ) ) {
+				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
+				return;
+			}
+			add_action( 'admin_notices', function() {
+				echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
+			} );
 		}
 	}
 }
