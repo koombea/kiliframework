@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.6
+  * Message added to layout builder when there are no json blocks
+  * Remove top border from flexible content modal tabs
+  * Code optimizations
 ## 0.1.5
   * Add support for child theme page templates
 ## 0.1.4

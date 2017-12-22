@@ -4,6 +4,7 @@
  *
  * @package kiliframework
  */
+
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js no-svg">
 	<head>
@@ -19,11 +20,13 @@
 					Sorry, no results were found.
 				</div>
 			</div>
-		<?php endif;
-		while ( have_posts() ) : the_post();
-			get_template_part( 'app/views/templates/content', get_post_type() !== 'post' ? get_post_type() : get_post_format() );
-		endwhile;
-		the_posts_navigation();
-		wp_footer(); ?>
+		<?php
+			endif;
+			while ( have_posts() ) : the_post();
+				get_template_part( 'app/views/templates/content', get_post_type() !== 'post' ? get_post_type() : get_post_format() );
+			endwhile;
+			the_posts_navigation();
+			wp_footer();
+		?>
 	</body>
 </html>

@@ -30,89 +30,50 @@ class Kili_Theme_Blocks {
 	 * @return void
 	 */
 	public function add_blocks_to_wp( $location ) {
-		if ( function_exists( 'acf_add_local_field_group' ) && $location ) {
-			if ( ! is_dir( $location['blocks_pages_dir'] ) ) {
-				wp_mkdir_p( $location['blocks_pages_dir'], 0755 );
-			}
-
-			$blocks_file_path = $this->get_acf_json_files(
-				$location['blocks_pages_dir'],
-				isset( $location['excluded_page_blocks'] ) ? $location['excluded_page_blocks'] : array()
-			);
-			$use_alternative_blocks = isset( $location['defined_alternative_page_blocks'] );
-
-			$layouts = array();
-			if ( $blocks_file_path || $use_alternative_blocks ) {
-				if ( count( $blocks_file_path ) > 0 ) {
-					$layout = $this->get_block_layout( $blocks_file_path );
-					if ( count( $layout ) ) {
-						$layouts = array_merge( $layouts, $layout );
-					}
-				}
-
-				if ( $use_alternative_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
-					$layout = $this->get_block_layout( $location['defined_alternative_page_blocks'], true );
-					if ( count( $layout ) ) {
-						$layouts = array_merge( $layouts, $layout );
-					}
-				}
-			}
-			$meta = array(
-				'key' => $location['flexible_content_group'],
-				'title' => $location['layout_title'],
-				'fields' => array(
-					array(
-						'key' => $location['flexible_content_key'],
-						'label' => '',
-						'name' => $location['flexible_content_id'],
-						'type' => 'flexible_content',
-						'instructions' => __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' ),
-						'required' => 0,
-						'conditional_logic' => 0,
-						'wrapper' => array(
-							'width' => '',
-							'class' => 'kiliframework',
-							'id' => '',
-						),
-						'button_label' => __( 'Add Section','kiliframework' ),
-						'min' => '',
-						'max' => '',
-						'layouts' => $layouts,
-					),
-				),
-				'menu_order' => 0,
-				'position' => 'normal',
-				'style' => 'default',
-				'label_placement' => 'top',
-				'instruction_placement' => 'label',
-				'hide_on_screen' => array(
-					0 => 'the_content',
-					1 => 'excerpt',
-					2 => 'custom_fields',
-					5 => 'categories',
-					6 => 'tags',
-				),
-				'location' => array(),
-				'active' => 1,
-				'description' => __( 'Kili Framework page builder', 'kiliframework' ),
-			);
-
-			$location_index = 0;
-			foreach ( $this->supported_formats as $format ) {
-				if ( isset( $location[ $format ] ) ) {
-					$meta['location'][ $location_index ] = array();
-					foreach ( $location[ $format ] as $place ) {
-						$meta['location'][ $location_index ][] = array(
-							'param'   => $format,
-							'operator'   => '==',
-							'value'   => $place,
-						);
-						$location_index++;
-					}
-				}
-			}
-			acf_add_local_field_group( $meta );
+		if ( ! function_exists( 'acf_add_local_field_group' ) || empty( $location ) ) {
+			return;
 		}
+		if ( ! is_dir( $location['blocks_pages_dir'] ) ) {
+			wp_mkdir_p( $location['blocks_pages_dir'], 0755 );
+		}
+		$blocks_file_path = $this->get_acf_json_files(
+			$location['blocks_pages_dir'],
+			isset( $location['excluded_page_blocks'] ) ? $location['excluded_page_blocks'] : array()
+		);
+		$use_alternative_blocks = isset( $location['defined_alternative_page_blocks'] );
+		$layouts = array();
+		$layout = array();
+		if ( isset( $blocks_file_path ) && count( $blocks_file_path ) > 0 ) {
+			$layout = $this->get_block_layout( $blocks_file_path );
+		} elseif ( $use_alternative_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
+			$layout = $this->get_block_layout( $location['defined_alternative_page_blocks'], true );
+		}
+		if ( count( $layout ) ) {
+			$layouts = array_merge( $layouts, $layout );
+		}
+		$meta_options = array(
+			'key' => $location['flexible_content_group'],
+			'title' => $location['layout_title'],
+			'flexible_key' => $location['flexible_content_key'],
+			'flexible_id' => $location['flexible_content_id'],
+			'layouts' => $layouts,
+		);
+		$meta = $this->get_meta_template( $meta_options );
+		$location_index = 0;
+		foreach ( $this->supported_formats as $format ) {
+			if ( isset( $location[ $format ] ) ) {
+				$meta['location'][ $location_index ] = array();
+				foreach ( $location[ $format ] as $place ) {
+					$meta['location'][ $location_index ][] = array(
+						'param'   => $format,
+						'operator'   => '==',
+						'value'   => $place,
+					);
+					$location_index++;
+				}
+			}
+		}
+		acf_add_local_field_group( $meta );
 	}
 
 	/**
@@ -179,20 +140,33 @@ class Kili_Theme_Blocks {
 		$layouts = array();
 		$size = count( $blocks_path );
 		for ( $i = 0; $i < $size; $i++ ) {
+			$file = $blocks_path[ $i ];
+			if ( $add_default_blocks ) {
+				$file = get_stylesheet_directory() . '/data/blocks/pages/' . $blocks_path[ $i ] . '.json';
+			}
 			if ( stripos( $blocks_path[ $i ], $excluded_file_name ) === false ) {
-				$file = $blocks_path[ $i ];
-				if ( $add_default_blocks ) {
-					$file = get_stylesheet_directory() . '/data/blocks/pages/' . $blocks_path[ $i ] . '.json';
-				}
 				$current_layout = $this->get_file_layout( $blocks_path, $file );
-				$current_layout_size = count( $current_layout );
-				if ( $current_layout_size > 0 ) {
-					for ( $j = 0; $j < $current_layout_size; $j++ ) {
-						if ( isset( $current_layout[ $j ] ) ) {
-							array_push( $layouts, $current_layout[ $j ] );
-						}
-					}
-				}
+				$layouts = array_merge( $layouts, $this->push_to_layouts( $current_layout ) );
+			}
+		}
+		return $layouts;
+	}
+
+	/**
+	 * Get layout structure
+	 *
+	 * @param array $current_layout Layout array.
+	 * @return array Array with layout structure
+	 */
+	private function push_to_layouts( $current_layout ) {
+		$current_layout_size = count( $current_layout );
+		if ( 0 === $current_layout_size ) {
+			return array();
+		}
+		$layouts = array();
+		for ( $j = 0; $j < $current_layout_size; $j++ ) {
+			if ( isset( $current_layout[ $j ] ) ) {
+				array_push( $layouts, $current_layout[ $j ] );
 			}
 		}
 		return $layouts;
@@ -206,22 +180,79 @@ class Kili_Theme_Blocks {
 	 * @return array Array with blocks structure
 	 */
 	private function get_acf_json_files( $directory, $excluded = array() ) {
-		$settings = array();
 		$settings_path_child = $directory;
 		$settings_child = Theme_Data::kili_scandir( $settings_path_child );
-		if ( $settings_child ) {
-			$real_path = '';
-			$size = count( $settings_child );
-			for ( $i = 0; $i < $size; $i++ ) {
-				if ( is_file( $settings_path_child . $settings_child[ $i ] ) ) {
-					$real_path = $settings_path_child;
-				}
-				$setting_name = explode( '.', $settings_child[ $i ] );
-				if ( in_array( $setting_name[0], $excluded, true ) === false ) {
-					array_push( $settings, $real_path . $settings_child[ $i ] );
-				}
+		if ( ! $settings_child ) {
+			return array();
+		}
+		$settings = array();
+		$size = count( $settings_child );
+		for ( $i = 0; $i < $size; $i++ ) {
+			$file_directory = is_file( $settings_path_child . $settings_child[ $i ] ) ? $settings_path_child : '';
+			$setting_name = explode( '.', $settings_child[ $i ] );
+			if ( in_array( $setting_name[0], $excluded, true ) === false ) {
+				array_push( $settings, $file_directory . $settings_child[ $i ] );
 			}
 		}
 		return $settings;
+	}
+
+	/**
+	 * Get metafield structure
+	 *
+	 * @param array $options Keys for the structure.
+	 * @return array Field structure
+	 */
+	private function get_meta_template( $options = array() ) {
+		$template = array(
+			'key' => $options['key'],
+			'title' => $options['title'],
+			'fields' => array(
+				array(
+					'key' => $options['flexible_key'],
+					'label' => '',
+					'name' => $options['flexible_id'],
+					'type' => 'flexible_content',
+					'instructions' => __( 'Place and edit your blocks. Add photos to your blocks, change text colors and fonts.', 'kiliframework' ),
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => 'kiliframework',
+						'id' => '',
+					),
+					'button_label' => __( 'Add Section','kiliframework' ),
+					'min' => '',
+					'max' => '',
+					'layouts' => $options['layouts'],
+				),
+			),
+		);
+		return array_merge( $template, $this->get_template_extra_vars() );
+	}
+
+	/**
+	 * Get template extra variables
+	 *
+	 * @return array The additional options
+	 */
+	private function get_template_extra_vars() {
+		return array(
+			'menu_order' => 0,
+			'position' => 'normal',
+			'style' => 'default',
+			'label_placement' => 'top',
+			'instruction_placement' => 'label',
+			'hide_on_screen' => array(
+				0 => 'the_content',
+				1 => 'excerpt',
+				2 => 'custom_fields',
+				5 => 'categories',
+				6 => 'tags',
+			),
+			'location' => array(),
+			'active' => 1,
+			'description' => __( 'Kili Framework page builder', 'kiliframework' ),
+		);
 	}
 }

@@ -115,13 +115,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->kili_context = new Kili_Context();
 			$this->kili_layout = new Kili_Layout();
 			$this->add_actions();
-			if ( class_exists( 'Timber' ) ) {
-				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
-			} else {
-				add_action( 'admin_notices', function() {
-					echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
-				} );
-			}
+			$this->check_timber_install();
 			$this->init_default_block_builder();
 			$this->flexible_modal->init();
 		}
@@ -178,22 +172,14 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		public function render_pages( $context = null ) {
 			$fields = array();
 			$args = array(
-				'sort_order' => 'asc',
-				'sort_column' => 'ID',
 				'hierarchical' => 1,
-				'exclude' => '',
-				'include' => '',
 				'meta_key' => 'kili_block_builder',
 				'meta_value' => '',
-				'authors' => '',
-				'child_of' => 0,
-				'parent' => -1,
-				'exclude_tree' => '',
-				'number' => '',
-				'offset' => 0,
-				'post_type' => get_post_types(),
-				'post_status' => 'publish',
 				'numberposts' => -1,
+				'post_status' => 'publish',
+				'post_type' => get_post_types(),
+				'sort_column' => 'ID',
+				'sort_order' => 'asc',
 			);
 			$pages_query = new WP_Query( $args );
 			$all_pages = $pages_query->get_posts( $args );
@@ -270,6 +256,21 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 				return $dist_path . $directory . $manifest->get()[ $file ];
 			}
 			return $dist_path . $directory . $file;
+		}
+
+		/**
+		 * Check if Timber is active
+		 *
+		 * @return void
+		 */
+		private function check_timber_install() {
+			if ( class_exists( 'Timber' ) ) {
+				Timber::$dirname = array( 'blocks/styles', 'views', 'views/partials', 'views/layout' );
+				return;
+			}
+			add_action( 'admin_notices', function() {
+				echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
+			} );
 		}
 	}
 }
