@@ -90,17 +90,18 @@ class Kili_Router {
 				$templates = array( "{$type}.twig" );
 		}
 		$template = $this->locate_template( $templates, $fallback );
-		if ( strcasecmp( $template, '' ) !== 0 ) {
-			$this->do_render = false;
-			if ( strpos( $template, 'index.php' ) === false ) {
-				$kili_context = new Kili_Context();
-				$kili_context->set_context( $this->context );
-				$this->context = $kili_context->get_context();
-				Timber::render( $template, $this->context );
-				return ;
-			}
-			include_once( $template );
+		if ( strcasecmp( $template, '' ) === 0 ) {
+			return;
 		}
+		$this->do_render = false;
+		if ( strpos( $template, 'index.php' ) === false ) {
+			$kili_context = new Kili_Context();
+			$kili_context->set_context( $this->context );
+			$this->context = $kili_context->get_context();
+			Timber::render( $template, $this->context );
+			return ;
+		}
+		include_once( $template );
 	}
 
 	/**
