@@ -36,21 +36,11 @@ class Kili_Context {
 	 */
 	public function set_context( $context = null ) {
 		$this->context = $context ? array_merge( Timber::get_context(), $context ) : Timber::get_context();
-		// Add extra data.
-		$this->context['options'] = function_exists( 'get_fields' ) ? get_fields( 'option' ) : '';
-		// Menu.
-		$this->context['menu']['primary'] = new TimberMenu( 'primary_navigation' );
-		// Sidebar.
-		$this->context['sidebar_primary'] = Timber::get_widgets( 'sidebar-1' );
 		// Site info.
 		$this->context['site'] = new TimberSite();
 		$this->context['admin_url'] = site_url();
 		$this->context['posts_link'] = $this->slug_all_posts_link();
-		// Assets path.
-		$this->context['dist']['images'] = $this->context['theme']->link . '/dist/images/';
-		$this->context['dist']['styles'] = $this->context['theme']->link . '/dist/styles/';
-		$this->context['dist']['scripts'] = $this->context['theme']->link . '/dist/scripts/';
-
+		// Support for WPML languages.
 		if ( function_exists( 'icl_get_languages' ) ) {
 			$languages = icl_get_languages( 'skip_missing=0&orderby=code' );
 			if ( ! empty( $languages ) ) {

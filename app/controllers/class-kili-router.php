@@ -89,8 +89,7 @@ class Kili_Router {
 			default:
 				$templates = array( "{$type}.twig" );
 		}
-		$template = $this->locate_template( $templates );
-		$template = empty( $template ) ? $fallback : $template;
+		$template = $this->locate_template( $templates, $fallback );
 		if ( strcasecmp( $template, '' ) !== 0 ) {
 			$this->do_render = false;
 			if ( strpos( $template, 'index.php' ) === false ) {
@@ -109,15 +108,16 @@ class Kili_Router {
 	 * extension. It will also check the parent theme, if the file exists, with
 	 * the use of locate_template().
 	 *
-	 * @param array $template_names array with the required view names.
+	 * @param array  $template_names array with the required view names.
+	 * @param string $fallback Name to assign if no template is found.
 	 * @return string View path
 	 */
-	private function locate_template( $template_names ) {
-		$located = '';
+	private function locate_template( $template_names, $fallback ) {
+		$located = $fallback;
 		foreach ( (array) $template_names as $template_name ) {
-			$located = $this->get_template_filename( $template_name );
-			if ( strcasecmp( $located, '' ) !== 0 ) {
-				return $located;
+			$name = $this->get_template_filename( $template_name );
+			if ( strcasecmp( $name, '' ) !== 0 ) {
+				return $name;
 			}
 		}
 		return $located;

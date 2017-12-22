@@ -23,18 +23,14 @@ class Kili_Layout {
 		$find = array( $layout_file, '_' );
 		$replace = array( $layout, '-' );
 		$new_layout_file = str_replace( $find, $replace, $layout_file );
-
 		$layout_directory = '/blocks/' . ( isset( $context['is_custom_post_type'] ) && $context['is_custom_post_type'] ? 'cpt/' . $context['post_type'] . '/' : 'pages/' );
 		$full_layout_directory = get_stylesheet_directory() . $layout_directory;
 		if ( ! is_dir( $full_layout_directory ) ) {
 			wp_mkdir_p( $full_layout_directory, 0755 );
 		}
-
 		$file_to_render = $this->get_file_name( $layout_directory, $new_layout_file, get_stylesheet_directory() . '/blocks/pages/' );
 		if ( strcasecmp( $file_to_render, '' ) === 0 ) {
-			$notice = '<section class="kili-missing-block"><div class="kili-container kili-soft"><b>' .
-				__( 'Notice', 'kiliframework' ) . ':</b> ' . __( 'No block template found', 'kiliframework' ) . ', ' . __( 'please create file', 'kiliframework' ) .
-				' ' . $new_layout_file . '.twig</div></section>';
+			$notice = $this->get_warn_message( $new_layout_file );
 			echo html_entity_decode( $notice );
 			return;
 		}
@@ -48,6 +44,18 @@ class Kili_Layout {
 		);
 		$context = array_merge( $context, $settings );
 		Timber::render( $file_to_render, $context, false );
+	}
+
+	/**
+	 * Get warning message when a block file is not found
+	 *
+	 * @param string $file_name Block file name.
+	 * @return string The warning message
+	 */
+	private function get_warn_message( $file_name = '' ) {
+		return '<section class="kili-missing-block"><div class="kili-container kili-soft"><b>' .
+			__( 'Notice', 'kiliframework' ) . ':</b> ' . __( 'No block template found', 'kiliframework' ) . ', ' . __( 'please create file', 'kiliframework' ) .
+			' ' . $file_name . '.twig</div></section>';
 	}
 
 	/**
