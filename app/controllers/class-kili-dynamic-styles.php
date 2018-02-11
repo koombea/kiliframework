@@ -73,34 +73,24 @@ class Kili_Dynamic_Styles {
 		}
 		$style = '';
 		$size = count( $fields );
+		$page_option_field = function_exists( 'get_fields' ) ? get_fields( 'option' ) : [];
 		for ( $i = 0; $i < $size; $i++ ) {
 			$field = $fields[ $i ];
+			$page_extra_field = array_filter( $field, function( $key ) { return $key != 'kili_block_builder'; }, ARRAY_FILTER_USE_KEY );
 			if ( isset( $field['kili_block_builder'] ) && is_array( $field['kili_block_builder'] ) ) {
-				$style .= $this->get_block_style( $field['kili_block_builder'], $field['page_id'] );
+				foreach ( $field['kili_block_builder'] as $page_key => $page_field ) {
+					$style .= $this->replace_placeholders( $page_field, $page_extra_field, $page_option_field, $field['page_id'], ( isset( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
+
+				}
 			}
-		}
-		if ( ! is_dir( $this->style_dir ) ) {
-			wp_mkdir_p( $this->style_dir, FS_CHMOD_DIR );
 		}
 		$current_style = file_exists( $this->style_file_name ) ? $wp_filesystem->get_contents( $this->style_file_name ) : '';
 		if ( strcasecmp( $current_style, $style ) !== 0 ) {
+			if ( ! is_dir( $this->style_dir ) ) {
+				wp_mkdir_p( $this->style_dir, FS_CHMOD_DIR );
+			}
 			$wp_filesystem->put_contents( $this->style_file_name, $this->clean_style( $style ), FS_CHMOD_FILE );
 		}
-	}
-
-	/**
-	 * Get style for a layout block
-	 *
-	 * @param array $block The layout block.
-	 * @param mixed $page_id The page id.
-	 * @return string The block style
-	 */
-	private function get_block_style( $block, $page_id ) {
-		$style = '';
-		foreach ( $block as $page_key => $page_field ) {
-			$style .= $this->replace_placeholders( $page_field, $page_id, ( isset( $page_field['acf_fc_layout'] ) ? $page_field['acf_fc_layout'] : '' ), $page_key );
-		}
-		return $style;
 	}
 
 	/**
@@ -137,22 +127,28 @@ class Kili_Dynamic_Styles {
 	 * Replace block placeholders with the real styles
 	 *
 	 * @param array  $field Block field.
+	 * @param array  $field Page field.
+	 * @param array  $field Option field.
 	 * @param mixed  $page_id Page id.
 	 * @param string $layout Block layout.
 	 * @param mixed  $block_position Block position.
 	 * @return string CSS string for the block field
 	 */
-	private function replace_placeholders( $field, $page_id, $layout, $block_position ) {
+	private function replace_placeholders( $field, $extra_field, $page_option_field, $page_id, $layout, $block_position ) {
 		$styles = $this->base_styles;
 		if ( strcasecmp( $styles, '' ) !== 0 ) {
+
 			$replacements['{{page_id}}'] = $page_id;
 			$replacements['{{block_position}}'] = $block_position;
 			$replacements['{{acf_fc_layout}}'] = $layout;
 			$replacements = array_merge( $replacements, $this->get_array_replacement( $field ) );
+			$replacements = array_merge( $replacements, $this->get_array_replacement( $extra_field ) );
+			$replacements = array_merge( $replacements, $this->get_array_replacement( $page_option_field ) );
 
 			foreach ( $replacements as $placeholder => $replacement ) {
 				$styles = str_replace( $placeholder, $replacement, $styles );
 			}
+
 			$styles = preg_replace( '/\.(.*){{(.)+}}/', '.no-apply', $styles );
 			$styles = preg_replace( '/(.*){{(.+)}}(.*)/', '', $styles );
 			$styles = str_replace( array( '\t' ), '', $styles );
