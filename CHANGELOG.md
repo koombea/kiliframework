@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.6
+  * Add dynamic styles support to pages and theme options
+
 ## 0.1.5
   * Message added to layout builder when there are no json blocks
   * Remove top border from flexible content modal tabs
