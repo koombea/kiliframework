@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.7
+  * Updates to editor styles
+
 ## 0.1.6
   * Add dynamic styles support to pages and theme options
 

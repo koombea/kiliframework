@@ -91,6 +91,10 @@
 #acf-kili_group_container.acf-postbox .acf-field.acf-field-flexible-content .acf-label label {
   color:#333;
 }
+
+#acf-kili_group_container.acf-postbox .acf-field.acf-field-flexible-content .list-group-item .acf-label label {
+  color:#FFFFFF;
+}
 #acf-kili_group_container.acf-postbox .acf-field .acf-label p.description {
   font-style:normal;
   color:#767676;
@@ -288,7 +292,7 @@ body.acf-modal-open {
 #acf-kili_group_container .acf-field-color-picker>.acf-input,#acf-kili_group_container .acf-field-color-picker>.acf-label,#acf-kili_group_container .acf-hide-check-radio>.acf-label {
   padding-top:2px;
 }
-#acf-kili_group_container .acf-field-color-picker>.acf-input,#acf-kili_group_container .acf-field-color-picker>.acf-label {
+/*#acf-kili_group_container .acf-field-color-picker>.acf-input,#acf-kili_group_container .acf-field-color-picker>.acf-label {
   display:inline-block;
 }
 #acf-kili_group_container .acf-field-true-false>.acf-label {
@@ -301,7 +305,7 @@ body.acf-modal-open {
 }
 #acf-kili_group_container .acf-field-true-false>.acf-input,#acf-kili_group_container .acf-field-true-false>.acf-label {
   display:inline-block;
-}
+}*/
 #acf-kili_group_container .acf-image-uploader .acf-button {
   margin-left:15px;
 }
@@ -318,10 +322,10 @@ body.acf-modal-open {
   font-size:16px;
   padding-top:2px;
 }
-#acf-kili_group_container .acf-field-text[data-name=section_id] .acf-input {
+/*#acf-kili_group_container .acf-field-text[data-name=section_id] .acf-input {
   max-width:70%;
-}
-#acf-kili_group_container .acf-field-number .acf-label {
+}*/
+/*#acf-kili_group_container .acf-field-number .acf-label {
   display:inline-block;
   margin-right:20px;
   padding-top:5px;
@@ -329,7 +333,7 @@ body.acf-modal-open {
 #acf-kili_group_container .acf-field-number .acf-input {
   display:inline-block;
   width:40%;
-}
+}*/
 .section-title .acf-label {
   display:inline-block;
   margin-right:20px!important;
@@ -418,4 +422,10 @@ body.acf-modal-open {
 
 .kili-soft {
   padding: 15px;
+}
+
+@media screen and (max-width: 782px) {
+  #acf-kili_group_container .acf-fields .acf-field {
+    width: 100% !important;
+  }
 }
