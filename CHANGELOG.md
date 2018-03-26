@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.8
+  * Update styles file permissions
+
 ## 0.1.7
   * Updates to editor styles
 
