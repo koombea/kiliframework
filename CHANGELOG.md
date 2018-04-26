@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.9
+  * Bugfix: author page shows error if the author has not set his/her name
+
 ## 0.1.8
   * Update styles file permissions
 
