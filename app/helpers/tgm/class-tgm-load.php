@@ -51,6 +51,17 @@ final class Tgm_Load {
 						'force_deactivation'    => false,
 						'external_url'          => 'https://github.com/AdvancedCustomFields/acf',
 					);
+
+		$plugins[] = array(
+						'name'                  => 'Advanced Custom Fields: Options Page',
+						'slug'                  => 'acf-options-page',
+						'source'                => 'https://connect.advancedcustomfields.com/index.php?a=download&p=options-page&k=OPN8-FA4J-Y2LW-81LS',
+						'required'              => false,
+						'version'               => '2.0.1',
+						'force_activation'      => false,
+						'force_deactivation'    => false,
+						'external_url'          => 'https://www.advancedcustomfields.com/add-ons/options-page/',
+					);
 	}
 
     $config = array(
