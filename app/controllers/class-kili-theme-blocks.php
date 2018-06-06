@@ -45,11 +45,12 @@ class Kili_Theme_Blocks {
 		$layout = array();
 		if ( isset( $blocks_file_path ) && count( $blocks_file_path ) > 0 ) {
 			$layout = $this->get_block_layout( $blocks_file_path );
-		} elseif ( $use_alternative_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
-			$layout = $this->get_block_layout( $location['defined_alternative_page_blocks'], true );
 		}
 		if ( count( $layout ) ) {
 			$layouts = array_merge( $layouts, $layout );
+		}
+		if ( $use_alternative_blocks && count( $location['defined_alternative_page_blocks'] ) > 0 ) {
+			$layouts = array_merge( $layouts, $this->get_block_layout( $location['defined_alternative_page_blocks'], true ) );
 		}
 		$meta_options = array(
 			'key' => $location['flexible_content_group'],
@@ -64,7 +65,7 @@ class Kili_Theme_Blocks {
 			if ( isset( $location[ $format ] ) ) {
 				$meta['location'][ $location_index ] = array();
 				foreach ( $location[ $format ] as $place ) {
-					$meta['location'][ $location_index ][] = array(
+					$meta['location'][ $location_index ] = array(
 						'param'   => $format,
 						'operator'   => '==',
 						'value'   => $place,
@@ -73,6 +74,7 @@ class Kili_Theme_Blocks {
 				}
 			}
 		}
+			$meta['location'] = array($meta['location']);
 		acf_add_local_field_group( $meta );
 	}
 
@@ -247,8 +249,6 @@ class Kili_Theme_Blocks {
 				0 => 'the_content',
 				1 => 'excerpt',
 				2 => 'custom_fields',
-				5 => 'categories',
-				6 => 'tags',
 			),
 			'location' => array(),
 			'active' => 1,
