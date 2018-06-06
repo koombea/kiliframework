@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.10
+  * Bugfix: Add missing post builder support and post template
+
 ## 0.1.9
   * Bugfix: author page shows error if the author has not set his/her name
 
