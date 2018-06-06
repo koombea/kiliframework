@@ -74,7 +74,7 @@ class Kili_Theme_Blocks {
 				}
 			}
 		}
-			$meta['location'] = array($meta['location']);
+		$meta['location'] = array( $meta['location'] );
 		acf_add_local_field_group( $meta );
 	}
 
