@@ -10,10 +10,26 @@
  */
 class Flexible_Content_Modal {
 
+	// Unique name of the module
+	static private $id = 'acf-fc-modal';
+
+	// Path
+	private $path = '';
+
 	/**
 	 * Initialize function
 	 */
 	public function init() {
+		global $acf;
+		$this->path = FRAMEWORK_URL . 'app/helpers/flexible-content-modal/';
+
+		// Path
+		if( $acf ) {
+			if( version_compare( $acf->version, '5.7.0', '<' ) ) {
+				$this->path .= '/56/';
+			}
+		}
+
 		// Hooks.
 		add_action( 'admin_init', array( $this, 'admin_css' ), 1, 999 );
 		add_action( 'admin_init', array( $this, 'admin_script' ), 1, 999 );
@@ -44,9 +60,9 @@ class Flexible_Content_Modal {
 	 */
 	public function admin_css() {
 		if ( ! class_exists( 'acf_pro' ) ) {
-			wp_enqueue_style( 'flexible-input', FRAMEWORK_URL . 'app/helpers/flexible-content-modal/css/flexible-input.css', array( 'acf-input' ) );
+			wp_enqueue_style( 'flexible-input', $this->path . 'css/flexible-input.css', array( 'acf-input' ) );
 		}
-		wp_enqueue_style( 'acf-fc-modal', FRAMEWORK_URL . 'app/helpers/flexible-content-modal/css/style.min.css', array( 'acf-input' ) );
+		wp_enqueue_style( 'acf-fc-modal', $this->path . 'css/style.min.css', array( 'acf-input' ) );
 	}
 
 	/**
@@ -56,9 +72,9 @@ class Flexible_Content_Modal {
 	 */
 	public function admin_script() {
 		if ( ! class_exists( 'acf_pro' ) ) {
-			wp_enqueue_script( 'acf-fc-modal-flexible', FRAMEWORK_URL . 'app/helpers/flexible-content-modal/js/flexible-content.min.js', array( 'acf-input' ) );
+			wp_enqueue_script( 'acf-fc-modal-flexible', $this->path . 'js/flexible-content.min.js', array( 'acf-input' ) );
 		}
-		wp_enqueue_script( 'acf-fc-modal', FRAMEWORK_URL . 'app/helpers/flexible-content-modal/js/script.min.js', array( 'acf-input' ) );
+		wp_enqueue_script( 'acf-fc-modal', $this->path . 'js/script.min.js', array( 'acf-input' ) );
 	}
 
 	/**
