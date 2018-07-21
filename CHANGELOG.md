@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.12
+  * Fixed the script for add class visible to current layouts
+
 ## 0.1.11
   * Add support for ACF 5.7 and keep support for previous versions
 
