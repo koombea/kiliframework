@@ -17,6 +17,7 @@
           if (!ACFFCM.isNested($layout))
             ACFFCM.addModal($layout);
         });
+        $(".kiliframework").addClass("visible");
       });
 
       // Add modal to new layouts
@@ -76,8 +77,6 @@
 
       $layout.prepend('<div class="acf-fc-modal-title" />');
       $layout.find('> .acf-fields, > .acf-table').wrapAll('<div class="acf-fc-modal-content" />');
-
-      $(".kiliframework").addClass("visible");
 
     },
 
