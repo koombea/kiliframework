@@ -10,9 +10,6 @@
  */
 class Flexible_Content_Modal {
 
-	// Unique name of the module
-	static private $id = 'acf-fc-modal';
-
 	// Path
 	private $path = '';
 

@@ -16,27 +16,6 @@
 *  Repeater
 *
 *---------------------------------------------------------------------------------------------*/
-.acf-repeater {
-  /* table */
-  /* row handle (add/remove) */
-  /* add in spacer to th (force correct width) */
-  /* row */
-  /* sortable */
-  /* layouts */
-  /*
-	&.-row > table > tbody > tr:before,
-	&.-block > table > tbody > tr:before {
-		content: "";
-		display: table-row;
-		height: 2px;
-		background: #f00;
-	}
-*/
-  /* empty */
-  /* collapsed */
-  /* collapsed (block layout) */
-  /* collapsed (table layout) */
-}
 .acf-repeater > table {
   margin: 0 0 8px;
   background: #F9F9F9;
@@ -86,17 +65,11 @@ body.browser-msie .acf-repeater .acf-row-handle .acf-icon.-minus {
   display: block;
   height: 1px;
 }
-.acf-repeater .acf-row {
-  /* hide clone */
-  /* hover */
-}
+
 .acf-repeater .acf-row.acf-clone {
   display: none !important;
 }
-.acf-repeater .acf-row:hover,
-.acf-repeater .acf-row.-hover {
-  /* icons */
-}
+
 .acf-repeater .acf-row:hover > .acf-row-handle .acf-icon,
 .acf-repeater .acf-row.-hover > .acf-row-handle .acf-icon {
   display: block;
@@ -175,7 +148,6 @@ body.browser-msie .acf-repeater .acf-row-handle .acf-icon.-minus {
   line-height: 1.4em;
 }
 .acf-flexible-content .layout .acf-fc-layout-order {
-  display: block;
   width: 20px;
   height: 20px;
   border-radius: 10px;
@@ -188,13 +160,6 @@ body.browser-msie .acf-repeater .acf-row-handle .acf-icon.-minus {
   color: #666;
 }
 /* controlls*/
-.acf-flexible-content {
-  /* layout */
-}
-.acf-flexible-content .layout {
-  /* controlls */
-  /* hover */
-}
 .acf-flexible-content .layout .acf-fc-layout-controlls {
   position: absolute;
   top: 8px;
@@ -471,10 +436,7 @@ html[dir="rtl"] .acf-flexible-content .layout .acf-fc-layout-controlls {
 html[dir="rtl"] .acf-gallery .acf-gallery-attachment {
   float: right;
 }
-.acf-gallery.sidebar-open {
-  /* hide attachment actions when sidebar is open */
-  /* allow sidebar to move over main for small widths (widget edit box) */
-}
+
 .acf-gallery.sidebar-open .acf-gallery-attachment .actions {
   display: none;
 }
