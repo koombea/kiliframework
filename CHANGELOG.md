@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.1.13
+  * Added Support Kili for Autosave JSON file from ACF
+
 ## 0.1.12
   * Fixed the script for add class visible to current layouts
 
