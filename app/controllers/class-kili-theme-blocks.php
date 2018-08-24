@@ -94,6 +94,9 @@ class Kili_Theme_Blocks {
 		$current_layout = null;
 		$sub_fields = null;
 		$get_json_content = $wp_filesystem->get_contents( $file );
+		if ( stripos( $get_json_content, '[' ) !== 0 ) {
+			$get_json_content = '[' . $get_json_content . ']';
+		}
 		$json_to_php = json_decode( $get_json_content, true );
 
 		if ( null !== $json_to_php && isset( $json_to_php[0] ) ) {
