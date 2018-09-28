@@ -98,7 +98,9 @@ class Kili_Theme_Blocks {
 			$get_json_content = '[' . $get_json_content . ']';
 		}
 		$json_to_php = json_decode( $get_json_content, true );
-
+		if ( $json_to_php[0]['active'] ) {
+			$json_to_php = null;
+		}
 		if ( null !== $json_to_php && isset( $json_to_php[0] ) ) {
 			$current_layout = array(
 				array(
@@ -164,6 +166,9 @@ class Kili_Theme_Blocks {
 	 * @return array Array with layout structure
 	 */
 	private function push_to_layouts( $current_layout ) {
+		if ( ! isset( $current_layout ) ) {
+			return array();
+		}
 		$current_layout_size = count( $current_layout );
 		if ( 0 === $current_layout_size ) {
 			return array();
