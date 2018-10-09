@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.0
+  * Add ACF local json support for kili Blocks
+
 ## 0.1.14
   * Bugfix: Add extra validation to blocks processing
 
