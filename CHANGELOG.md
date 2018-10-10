@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.0.1
-  * Update page hierarchy for render page template {$type}-{$pagename}.twig and {$type}-{$id}.twig
+  * Updated page hierarchy for render the page template type {$type}-{$pagename}.twig and {$type}-{$id}.twig
 
 ## 1.0.0
   * Add ACF local json support for kili Blocks
