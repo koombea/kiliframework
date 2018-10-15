@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.2
+  * Updated theme hierarchy: Child theme support for the single page on specific category eg. single-{category}.twig
+
 ## 1.0.1
   * Updated page hierarchy for render the page template type {$type}-{$pagename}.twig and {$type}-{$id}.twig
 
