@@ -167,7 +167,7 @@ class Kili_Router {
 				'is_preview' => $is_preview,
 				'is_user_logged_in' => $is_user_logged_in,
 				'object' => $object,
-				'show' => strcasecmp( '' . $current_user->ID, $object->post_author ) === 0,
+				'show' => strcasecmp( '' . $current_user->ID, $object->post_author ) === 0 || current_user_can('editor') || current_user_can('administrator'),
 				'type' => $type,
 			) );
 		} elseif ( post_password_required( $object->ID ) ) {
@@ -202,9 +202,14 @@ class Kili_Router {
 			return $response;
 		}
 		if ( $options['is_preview'] && $options['is_user_logged_in'] ) {
-			$response = "{$options['type']}.twig";
+			if ( strcasecmp( 'post', $options['object']->post_type ) !== 0 || strcasecmp( 'page', $options['object']->post_type ) !== 0 ) {
+				return "single-{$options['object']->post_type}.twig";
+			} else if ( strcasecmp( 'page', $options['object']->post_type ) !== 0 ) {
+				return "{$options['type']}.twig";
+			}
+			return "{$options['type']}.twig";
 		} elseif ( $options['object'] ) {
-			$response = "{$options['type']}-{$options['object']->post_type}.twig";
+			return "{$options['type']}-{$options['object']->post_type}.twig";
 		}
 		return $response;
 	}
