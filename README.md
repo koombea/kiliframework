@@ -1,4 +1,4 @@
-# <a href="https://www.kiliframework.org" target="_blank"><img src="https://www.kiliframework.org/wp-content/uploads/2017/09/kili-slack-43px.png"> Kili Framework</a>
+# <a href="https://www.kiliframework.org" target="_blank"><img src="https://www.kiliframework.org/logo.svg"> Kili Framework</a>
 
 [![Build Status](https://travis-ci.org/koombea/kiliframework.svg?branch=develop)](https://travis-ci.org/koombea/kiliframework) [![Code Climate](https://codeclimate.com/github/koombea/kiliframework/badges/gpa.svg)](https://codeclimate.com/github/koombea/kiliframework) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fcc1b5b632ff43c7b89d1383360d2483)](https://www.codacy.com/app/fabolivark/kiliframework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=koombea/kiliframework&amp;utm_campaign=Badge_Grade)
 [![Join the chat at https://gitter.im/kiliframework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kiliframework/Lobby)
