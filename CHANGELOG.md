@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.3
+  * Add validation for page, post and custom post type preview modes
+
 ## 1.0.2
   * Updated theme hierarchy: Child theme support for the single page on specific category eg. single-{category}.twig
 
