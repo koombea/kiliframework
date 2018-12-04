@@ -98,7 +98,7 @@ class Kili_Theme_Blocks {
 			$get_json_content = '[' . $get_json_content . ']';
 		}
 		$json_to_php = json_decode( $get_json_content, true );
-		if ( $json_to_php[0]['active'] ) {
+		if ( isset($json_to_php) && count($json_to_php) > 0 && $json_to_php[0]['active'] ) {
 			$json_to_php = null;
 		}
 		if ( null !== $json_to_php && isset( $json_to_php[0] ) ) {
