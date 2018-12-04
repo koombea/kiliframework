@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.4
+  * Add validation for kili blocks
+
 ## 1.0.3
   * Add validation for page, post and custom post type preview modes
 
