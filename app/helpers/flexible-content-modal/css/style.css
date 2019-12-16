@@ -509,7 +509,7 @@ body.acf-modal-open {
   display:block;
 }
 .acf-tooltip.-confirm,.select2-dropdown {
-  z-index:100060!important;
+  z-index:100101!important;
 }
 .mce-floatpanel {
   z-index:100060!important;

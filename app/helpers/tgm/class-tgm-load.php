@@ -26,16 +26,6 @@ final class Tgm_Load {
 			'slug'               => 'tinymce-advanced',
 			'required'           => false,
 		),
-		array(
-			'name'                  => 'Kili. Automatic Updater',
-			'slug'                  => 'kili-automatic-updater',
-			'source'                => 'https://github.com/fabolivark/kili-automatic-updater/archive/master.zip',
-			'required'              => false,
-			'version'               => '0.0.2',
-			'force_activation'      => false,
-			'force_deactivation'    => false,
-			'external_url'          => 'https://github.com/fabolivark/kili-automatic-updater',
-		),
     );
 
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );

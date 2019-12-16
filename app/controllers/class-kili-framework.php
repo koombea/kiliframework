@@ -110,7 +110,7 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			$this->kili_router = new Kili_Router();
 			$this->default_kili_blocks = new Kili_Theme_Blocks();
 			$this->search_filters = new Kili_Search_Filter();
-			$this->dynamic_styles = new Kili_Dynamic_Styles();
+			// $this->dynamic_styles = new Kili_Dynamic_Styles();
 			$this->flexible_modal = new Flexible_Content_Modal();
 			$this->kili_context = new Kili_Context();
 			$this->kili_layout = new Kili_Layout();
@@ -135,8 +135,11 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 			add_action( 'wp_enqueue_script', array( $this->default_kili_blocks, 'enqueueAdmin' ) );
 			add_action( 'page_blocks', array( $this, 'page_blocks_content' ) );
 			add_action( 'after_setup_theme', array( $this, 'load_text_domain' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'include_parent_assets' ) );
 			add_action( 'custom_asset', array( $this, 'custom_asset_args' ), 10, 2 );
+			add_action( 'acf/save_post', array( $this, 'kili_acf_save_post' ), 20);
+			if ( strcasecmp(WP_ENV, 'development') !== 0 ) {
+				add_action( 'wp_enqueue_scripts', array( $this, 'include_parent_assets' ) );
+			}
 		}
 
 		/**
@@ -176,28 +179,6 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * @return void
 		 */
 		public function render_pages( $context = null ) {
-			$fields = array();
-			$args = array(
-				'hierarchical' => 1,
-				'meta_key' => 'kili_block_builder',
-				'meta_value' => '',
-				'numberposts' => -1,
-				'post_status' => 'publish',
-				'post_type' => get_post_types(),
-				'sort_column' => 'ID',
-				'sort_order' => 'asc',
-			);
-			$pages_query = new WP_Query( $args );
-			$all_pages = $pages_query->get_posts( $args );
-			$all_pages_length = count( $all_pages );
-			for ( $key = 0; $key < $all_pages_length; $key++ ) {
-				$page_fields = function_exists( 'get_fields' ) ? get_fields( $all_pages[ $key ]->ID ) : '';
-				if ( $page_fields ) {
-					$page_fields['page_id'] = $all_pages[ $key ]->ID;
-				}
-				array_push( $fields, $page_fields );
-			}
-			$this->dynamic_styles->process_blocks_styles( $fields );
 			$this->kili_router->set_current_view( $context );
 		}
 
@@ -208,11 +189,51 @@ if ( ! class_exists( 'Kili_Framework' ) ) {
 		 * @return void
 		 */
 		public function page_blocks_content( $context ) {
+			if ( strcasecmp(WP_ENV, 'development') !== 0 ) {
+				global $post;
+				if ( strcasecmp( '', $post->post_content ) !== 0 ) {
+					echo $post->post_content;
+					return;
+				}
+			}
+
 			$block_position = 0;
 			while ( have_rows( 'kili_block_builder' ) ) : the_row();
 				$this->kili_layout->render( get_row_layout(), $block_position, $context, 'kili_block_builder' );
 				$block_position++;
 			endwhile;
+		}
+
+		/**
+		 * Callback for acf/save_post action.
+		 * Check post/page custom blocks and replace post/page content with the blocks html
+		 *
+		 * @param  mixed $post_id Current post/page
+		 *
+		 * @return void
+		 */
+		public function kili_acf_save_post ( $post_id ) {
+			if ( ! function_exists( 'get_fields' ) ) {
+				return;
+			}
+			if ( empty( $_POST['acf'] ) ) {
+				return;
+			}
+			$template_slug = get_page_template_slug($post_id);
+			$is_active = strcasecmp( $template_slug, 'page-templates/layout-builder.php' ) == 0;
+			remove_action('acf/save_post', 'kili_acf_save_post', 20 );
+			if ( $is_active ) {
+				$kili_blocks = new Kili_Blocks( $post_id );
+				$blocks_html_content = $kili_blocks->get_post_html();
+				if ( strcasecmp( $blocks_html_content, '' ) != 0 ) {
+					$content = array(
+						'ID' => $post_id,
+						'post_content' => $blocks_html_content,
+					);
+					wp_update_post($content);
+				}
+			}
+			add_action( 'acf/save_post', array( $this, 'kili_acf_save_post' ), 20 );
 		}
 
 		/**

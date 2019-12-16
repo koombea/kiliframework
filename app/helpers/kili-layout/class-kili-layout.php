@@ -53,7 +53,7 @@ class Kili_Layout {
 	 * @return string The warning message
 	 */
 	private function get_warn_message( $file_name = '' ) {
-		return '<section class="kili-missing-block"><div class="kili-container kili-soft"><b>' .
+		return '<section class="kili-missing-block" style="background-color:#d6ba46;color:#FFFFFF;border:1px dotted #867328;"><div class="kili-container kili-soft" style="margin:auto;max-width:1280px;padding: 15px;"><b>' .
 			__( 'Notice', 'kiliframework' ) . ':</b> ' . __( 'No block template found', 'kiliframework' ) . ', ' . __( 'please create file', 'kiliframework' ) .
 			' ' . $file_name . '.twig</div></section>';
 	}
